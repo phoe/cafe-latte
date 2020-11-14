@@ -18,10 +18,10 @@ public class Tagbody implements Consumer<Tagbody> {
 
   @Override
   public void accept(Tagbody tagbody) {
-    valid = true;
     int startFrom = 0;
     boolean keepGoing = true;
     while (keepGoing) {
+      valid = true;
       try {
         for (int i = startFrom; i < elements.size(); ++i) {
           TagbodyElement element = elements.get(i);
@@ -33,12 +33,12 @@ public class Tagbody implements Consumer<Tagbody> {
         if (elements.contains(tag)) {
           startFrom = elements.indexOf(tag);
         } else {
-          valid = false;
           throw go;
         }
+      } finally {
+        valid = false;
       }
     }
-    valid = false;
   }
 
   public static void tagbody(TagbodyElement... elements) {

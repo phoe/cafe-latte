@@ -28,11 +28,11 @@ public class Block<T> implements Supplier<T> {
       if (returnFrom.getTag() == this) {
         ref.returnValue = (T) returnFrom.getValue();
       } else {
-        valid = false;
         throw returnFrom;
       }
+    } finally {
+      valid = false;
     }
-    valid = false;
     return ref.returnValue;
   }
 
