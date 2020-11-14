@@ -23,11 +23,12 @@ This is an attempt to recreate some nifty Common Lisp features in plain Java. Th
   * Do not fill in the stack trace when instantiated; see the `makeReadyToThrow()` method.
 * [X] Handlers
   * Implemented in the `Handler` class.
+* [X] `#'signal`
+  * Implemented in the `Handler` class as a static method.
 * [X] `handler-bind`
   * Implemented in the `HandlerBind` class.
   * Unit tests done.
 * [ ] `handler-case`
-* [ ] `#'signal`
 * [ ] Restarts
 * [ ] `restart-bind`
 * [ ] `restart-case`
