@@ -1,4 +1,4 @@
-package systems.raptor.cafe_latte;
+package systems.raptor.cafe_latte.dynamic_variables;
 
 import java.util.LinkedList;
 import java.util.List;

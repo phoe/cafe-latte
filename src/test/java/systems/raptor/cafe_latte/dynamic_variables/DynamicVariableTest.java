@@ -1,9 +1,9 @@
-package systems.raptor.cafe_latte;
+package systems.raptor.cafe_latte.dynamic_variables;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static systems.raptor.cafe_latte.DynamicVariable.bind;
+import static systems.raptor.cafe_latte.dynamic_variables.DynamicVariable.bind;
 
 class DynamicVariableTest {
 

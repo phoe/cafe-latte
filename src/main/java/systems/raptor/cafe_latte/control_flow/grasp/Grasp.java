@@ -1,6 +1,6 @@
 package systems.raptor.cafe_latte.control_flow.grasp;
 
-import systems.raptor.cafe_latte.DynamicVariable;
+import systems.raptor.cafe_latte.dynamic_variables.DynamicVariable;
 import systems.raptor.cafe_latte.control_flow.ControlFlowException;
 
 import java.util.LinkedList;
@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static systems.raptor.cafe_latte.DynamicVariable.bind;
+import static systems.raptor.cafe_latte.dynamic_variables.DynamicVariable.bind;
 
 public class Grasp<T> implements Supplier<T> {
 
