@@ -14,6 +14,12 @@ This is an attempt to recreate some nifty Common Lisp features in plain Java. Th
 
 Each part of Common Lisp implemented here should have basic unit test coverage.
 
+## Using
+
+**don't**
+
+Seriously, though, this library is not yet documented or complete; take a look at the unit tests if you really need to see how to use the various constructs provided here.
+
 ## Roadmap
 
 * [X] Dynamic variables
