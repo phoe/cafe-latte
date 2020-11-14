@@ -46,6 +46,10 @@ public class HandlerCase<T> implements Supplier<T> {
     List<TagbodyElement> tagbodyElements = new LinkedList<>();
     List<Handler<Void>> trampolineHandlers = new LinkedList<>();
     Tagbody tagbody = new Tagbody();
+    tagbodyElements.add((tagbody1) -> new HandlerBind(trampolineHandlers, () -> {
+      returnFrom(block, body.get());
+      return null;
+    }).get());
     for (Handler<T> handler : handlers) {
       TagbodyTag tag = tag();
       trampolineHandlers.add(new Handler<>(handler.getConditionClass(), (condition) -> {
@@ -57,10 +61,6 @@ public class HandlerCase<T> implements Supplier<T> {
       tagbodyElements.add((tagbody1) ->
               returnFrom(block, handler.apply(conditionStorage.transferredCondition)));
     }
-    tagbodyElements.add(0, (tagbody1) -> new HandlerBind(trampolineHandlers, () -> {
-      returnFrom(block, body.get());
-      return null;
-    }).get());
     tagbody.setElements(tagbodyElements.toArray(new TagbodyElement[]{}));
     return tagbody;
   }

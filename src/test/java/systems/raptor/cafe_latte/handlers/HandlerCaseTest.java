@@ -10,13 +10,46 @@ import static systems.raptor.cafe_latte.handlers.Handler.signal;
 
 class HandlerCaseTest {
 
-  static class TestCondition extends Condition {}
+  @Test
+  public void HandlerCaseNoHandlersTest() {
+    HandlerCase<String> handlerCase = new HandlerCase<>(List.of(), () -> "bar");
+    String returnValue = handlerCase.get();
+    assertEquals("bar", returnValue);
+  }
+
+  @Test
+  public void HandlerCaseMultipleHandlersTest() {
+    HandlerCase<String> handlerCase = new HandlerCase<>(List.of(
+            new Handler<>(Condition.class, (condition) -> "foo"),
+            new Handler<>(Condition.class, (condition) -> "bar"),
+            new Handler<>(Condition.class, (condition) -> "baz")), () -> {
+      signal(new Condition());
+      return "quux";
+    });
+    String returnValue = handlerCase.get();
+    assertEquals("foo", returnValue);
+  }
+
+  private static class TestCondition extends Condition {}
+
+  @Test
+  public void HandlerCaseMultipleHandlersInheritanceTest() {
+    HandlerCase<String> handlerCase = new HandlerCase<>(List.of(
+            new Handler<>(TestCondition.class, (condition) -> "foo"),
+            new Handler<>(Condition.class, (condition) -> "bar"),
+            new Handler<>(TestCondition.class, (condition) -> "baz")), () -> {
+      signal(new Condition());
+      return "quux";
+    });
+    String returnValue = handlerCase.get();
+    assertEquals("bar", returnValue);
+  }
 
   @Test
   public void HandlerCaseTransferTest() {
-    Handler<String> handler = new Handler<>(TestCondition.class, (condition) -> "foo");
-    HandlerCase<String> handlerCase = new HandlerCase<>(List.of(handler), () -> {
-      signal(new TestCondition());
+    HandlerCase<String> handlerCase = new HandlerCase<>(List.of(
+            new Handler<>(Condition.class, (condition) -> "foo")), () -> {
+      signal(new Condition());
       return "bar";
     });
     String returnValue = handlerCase.get();
@@ -25,13 +58,12 @@ class HandlerCaseTest {
 
   @Test
   public void HandlerCaseNoTransferTest() {
-    Handler<String> handler = new Handler<>(TestCondition.class, (condition) -> "foo");
-    HandlerCase<String> handlerCase = new HandlerCase<>(List.of(handler), () -> {
+    HandlerCase<String> handlerCase = new HandlerCase<>(List.of(
+            new Handler<>(TestCondition.class, (condition) -> "foo")), () -> {
       signal(new Condition());
       return "bar";
     });
     String returnValue = handlerCase.get();
     assertEquals("bar", returnValue);
   }
-
 }

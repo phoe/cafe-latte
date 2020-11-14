@@ -30,7 +30,7 @@ This is an attempt to recreate some nifty Common Lisp features in plain Java. Th
   * Unit tests done.
 * [X] `handler-case`
   * Implemented in the `HandlerCase` class.
-  * *Some* unit tests done.
+  * Unit tests done.
 * [ ] Restarts
 * [ ] `restart-bind`
 * [ ] `restart-case`
