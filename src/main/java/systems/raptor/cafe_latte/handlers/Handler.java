@@ -11,8 +11,7 @@ import static systems.raptor.cafe_latte.dynamic_variables.DynamicVariable.bind;
 
 public class Handler<T> implements Function<Condition, T> {
 
-  @SuppressWarnings("rawtypes")
-  final static DynamicVariable<List<List<Handler>>> handlerClusters
+  final static DynamicVariable<List<List<Handler<Object>>>> handlerClusters
           = new DynamicVariable<>(new LinkedList<>(new LinkedList<>()));
 
   private final Class<? extends Condition> conditionClass;
@@ -36,14 +35,13 @@ public class Handler<T> implements Function<Condition, T> {
     }
   }
 
-  @SuppressWarnings("rawtypes")
   public static void signal(Condition condition) {
-    List<List<Handler>> clusters = handlerClusters.get();
+    List<List<Handler<Object>>> clusters = handlerClusters.get();
     for (int i = 0; i < clusters.size(); ++i) {
-      List<Handler> cluster = clusters.get(i);
-      List<List<Handler>> remainingClusters = clusters.subList(i + 1, clusters.size());
+      List<Handler<Object>> cluster = clusters.get(i);
+      List<List<Handler<Object>>> remainingClusters = clusters.subList(i + 1, clusters.size());
       bind(handlerClusters, remainingClusters, () -> {
-        for (Handler handler : cluster) {
+        for (Handler<Object> handler : cluster) {
           handler.apply(condition);
         }
       });

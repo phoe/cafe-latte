@@ -39,7 +39,8 @@ class HandlerBindTest {
     assertEquals(5, counter.counter);
   }
 
-  private static class TestCondition extends Condition {}
+  private static class TestCondition extends Condition {
+  }
 
   @Test
   public void handlerBindInheritanceTest() {
@@ -61,7 +62,7 @@ class HandlerBindTest {
       new HandlerBind<Void>(List.of(makeAdditionHandler(Condition.class, counter, 10, true)), () -> {
         new HandlerBind<Void>(List.of(makeAdditionHandler(Condition.class, counter, 100, true)), () -> {
           new HandlerBind<Void>(List.of(makeAdditionHandler(Condition.class, counter, 1000, true)), () -> {
-          signal(new Condition());
+            signal(new Condition());
             return null;
           }).get();
           return null;
@@ -74,8 +75,8 @@ class HandlerBindTest {
   }
 
   @SuppressWarnings("SameParameterValue")
-  private Handler<Void> makeAdditionHandler(Class<? extends Condition> conditionClass,
-                                            Counter counter, int amount, boolean resignal) {
+  private Handler<Object> makeAdditionHandler(Class<? extends Condition> conditionClass,
+                                              Counter counter, int amount, boolean resignal) {
     return new Handler<>(conditionClass, (condition) -> {
       counter.counter += amount;
       if (resignal) signal(condition);
@@ -84,8 +85,8 @@ class HandlerBindTest {
   }
 
   @SuppressWarnings("SameParameterValue")
-  private Handler<Void> makeMultiplicationHandler(Class<? extends Condition> conditionClass,
-                                                  Counter counter, int amount, boolean resignal) {
+  private Handler<Object> makeMultiplicationHandler(Class<? extends Condition> conditionClass,
+                                                    Counter counter, int amount, boolean resignal) {
     return new Handler<>(conditionClass, (condition) -> {
       counter.counter *= amount;
       if (resignal) signal(condition);

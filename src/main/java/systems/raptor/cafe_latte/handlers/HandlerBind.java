@@ -11,22 +11,20 @@ import static systems.raptor.cafe_latte.dynamic_variables.DynamicVariable.bind;
 public class HandlerBind<T> implements Supplier<T> {
 
   private final Supplier<T> body;
-  @SuppressWarnings("rawtypes")
-  private final List<Handler> handlers;
+  private final List<Handler<Object>> handlers;
 
-  @SuppressWarnings("rawtypes")
-  public HandlerBind(List<Handler> handlers, Supplier<T> body) {
+  public HandlerBind(List<Handler<Object>> handlers, Supplier<T> body) {
     this.handlers = handlers;
     this.body = body;
   }
 
   @Override
-  @SuppressWarnings("rawtypes")
   public T get() {
     var ref = new Object() {
       T returnValue;
     };
-    List<List<Handler>> newClusters = Stream.concat(Stream.of(handlers), handlerClusters.get().stream())
+    List<List<Handler<Object>>> newClusters =
+            Stream.concat(Stream.of(handlers), handlerClusters.get().stream())
             .collect(Collectors.toList());
     bind(handlerClusters, newClusters, () -> ref.returnValue = body.get());
     return ref.returnValue;

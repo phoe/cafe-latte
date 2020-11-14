@@ -41,12 +41,11 @@ public class HandlerCase<T> implements Supplier<T> {
     return block;
   }
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
   private Tagbody generateTagbody(Block<T> block, ConditionStorage conditionStorage) {
     List<TagbodyElement> tagbodyElements = new LinkedList<>();
-    List<Handler<Void>> trampolineHandlers = new LinkedList<>();
+    List<Handler<Object>> trampolineHandlers = new LinkedList<>();
     Tagbody tagbody = new Tagbody();
-    tagbodyElements.add((tagbody1) -> new HandlerBind(trampolineHandlers, () -> {
+    tagbodyElements.add((tagbody1) -> new HandlerBind<T>(trampolineHandlers, () -> {
       returnFrom(block, body.get());
       return null;
     }).get());
