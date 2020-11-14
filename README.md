@@ -1,6 +1,18 @@
 # Cafe Latte
 
+> "We were not out to win over the Lisp programmers; we were after the C++ programmers. We managed to drag a lot of them about halfway to Lisp."
+> 
+> --- Guy Steele, Java spec co-author
+
+> "Notice that no one mentions that this way they also managed to drag a lot of Lisp programmers about halfway back to C."
+>
+> --- angery Internet rando
+
+## About
+
 This is an attempt to recreate some nifty Common Lisp features in plain Java. These are, most importantly, the foundations for a condition system, and a simple condition system itself.
+
+Each part of Common Lisp implemented here should have basic unit test coverage.
 
 ## Roadmap
 
