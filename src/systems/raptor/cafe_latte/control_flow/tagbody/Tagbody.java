@@ -1,41 +1,35 @@
 package systems.raptor.cafe_latte.control_flow.tagbody;
 
-import systems.raptor.cafe_latte.DynamicVariable;
 import systems.raptor.cafe_latte.control_flow.ControlFlowException;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.function.Consumer;
 
-import static systems.raptor.cafe_latte.DynamicVariable.bind;
-
-public class Tagbody {
-
-  private final static DynamicVariable<List<TagbodyTag>> activeTags = new DynamicVariable<>(new LinkedList<>());
+public class Tagbody implements Consumer<Tagbody> {
 
   private final List<TagbodyElement> elements;
 
-  private Tagbody(TagbodyElement... elements) {
+  private boolean valid;
+
+  public Tagbody(TagbodyElement... elements) {
     this.elements = Arrays.asList(elements);
-    List<TagbodyTag> tags = this.elements.stream()
-            .filter((x) -> x instanceof TagbodyTag)
-            .map((x) -> (TagbodyTag) x)
-            .collect(Collectors.toList());
-    List<TagbodyTag> newActiveTags = Stream.concat(tags.stream(), activeTags.get().stream())
-            .collect(Collectors.toList());
-    bind(activeTags, newActiveTags, () -> {
-      Map.Entry<Boolean, Integer> result = new AbstractMap.SimpleEntry<>(true, 0);
-      while (result.getKey()) {
-        result = runHelper(result.getValue());
-      }
-    });
+  }
+
+  @Override
+  public void accept(Tagbody tagbody) {
+    valid = true;
+    Map.Entry<Boolean, Integer> result = new AbstractMap.SimpleEntry<>(true, 0);
+    while (result.getKey()) {
+      result = runHelper(result.getValue());
+    }
+    valid = false;
   }
 
   private Map.Entry<Boolean, Integer> runHelper(int startPosition) {
     try {
       for (int i = startPosition; i < elements.size(); ++i) {
         TagbodyElement element = elements.get(i);
-        element.run();
+        element.accept(this);
       }
       return new AbstractMap.SimpleEntry<>(false, elements.size());
     } catch (Go go) {
@@ -49,16 +43,17 @@ public class Tagbody {
   }
 
   public static void tagbody(TagbodyElement... elements) {
-    new Tagbody(elements);
+    Tagbody tagbody = new Tagbody(elements);
+    tagbody.accept(tagbody);
   }
 
   public static TagbodyTag tag() {
     return new TagbodyTag();
   }
 
-  public static void go(TagbodyTag tag) {
-    if (!activeTags.get().contains(tag)) {
-      throw new ControlFlowException("Attempted to go() to a tagbody tag that is no longer in scope");
+  public static void go(Tagbody tagbody, TagbodyTag tag) {
+    if (!tagbody.valid) {
+      throw new ControlFlowException("Attempted to go() to a tagbody that is no longer in scope");
     } else {
       throw new Go(tag);
     }

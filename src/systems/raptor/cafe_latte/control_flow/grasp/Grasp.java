@@ -11,12 +11,11 @@ import java.util.stream.Stream;
 
 import static systems.raptor.cafe_latte.DynamicVariable.bind;
 
-public class Grasp<T> {
+public class Grasp<T> implements Supplier<T> {
 
   private final static DynamicVariable<List<Object>> activeTags = new DynamicVariable<>(new LinkedList<>());
 
   private final Supplier<T> supplier;
-
   private final Object tag;
 
   public Grasp(Object tag, Supplier<T> supplier) {
@@ -25,7 +24,7 @@ public class Grasp<T> {
   }
 
   @SuppressWarnings({"unchecked"})
-  public T run() {
+  public T get() {
     List<Object> newActiveTags = Stream.concat(Stream.of(tag), activeTags.get().stream())
             .collect(Collectors.toList());
     var ref = new Object() {

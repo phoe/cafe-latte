@@ -1,3 +1,5 @@
 package systems.raptor.cafe_latte.control_flow.tagbody;
 
-public interface TagbodyElement extends Runnable {}
+import java.util.function.Consumer;
+
+public interface TagbodyElement extends Consumer<Tagbody> {}
