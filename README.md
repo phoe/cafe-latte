@@ -4,7 +4,7 @@
 > 
 > --- Guy Steele, Java spec co-author
 
-> "Notice that no one mentions that this way they also managed to drag a lot of Lisp programmers about halfway back to C."
+> "Notice that no one mentions that this way they also managed to drag a lot of Lisp programmers about halfway back to C++."
 >
 > --- angery Internet rando
 
