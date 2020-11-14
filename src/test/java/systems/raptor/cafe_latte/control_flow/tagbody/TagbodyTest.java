@@ -1,20 +1,16 @@
 package systems.raptor.cafe_latte.control_flow.tagbody;
 
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import systems.raptor.cafe_latte.control_flow.ControlFlowException;
-import systems.raptor.cafe_latte.control_flow.grasp.Grasp;
-import systems.raptor.cafe_latte.control_flow.tagbody.TagbodyTag;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static systems.raptor.cafe_latte.control_flow.grasp.Grasp.fling;
 import static systems.raptor.cafe_latte.control_flow.tagbody.Tagbody.*;
 import static systems.raptor.cafe_latte.control_flow.tagbody.Tagbody.tag;
 
 class TagbodyTest {
 
   @Test
-  public void TagbodyNormalReturnTest() {
+  public void tagbodyNormalReturnTest() {
     var ref = new Object() {
       boolean passed = true;
     };
@@ -25,10 +21,9 @@ class TagbodyTest {
   }
 
   @Test
-  public void TagbodySingleGoTest() {
+  public void tagbodySingleGoTest() {
     var ref = new Object() {
       int count = 0;
-      boolean keepGoing = false;
     };
     TagbodyTag tag = tag();
     tagbody(tag,
@@ -42,10 +37,9 @@ class TagbodyTest {
   }
 
   @Test
-  public void TagbodyDoubleGoTest() {
+  public void tagbodyDoubleGoTest() {
     var ref = new Object() {
       int count = 0;
-      boolean keepGoing = false;
     };
     TagbodyTag tag1 = tag(), tag2 = tag();
     tagbody(tag1,
@@ -63,14 +57,14 @@ class TagbodyTest {
   }
 
   @Test
-  public void TagbodyControlFlowExceptionTest() {
+  public void tagbodyControlFlowExceptionTest() {
     TagbodyTag tag = tag();
     Tagbody tagbody = new Tagbody(tag);
     assertThrows(ControlFlowException.class, () -> go(tagbody, tag));
   }
 
   @Test
-  public void TagbodyInvalidAssociationExceptionTest() {
+  public void tagbodyInvalidAssociationExceptionTest() {
     TagbodyTag tag = tag();
     assertThrows(ControlFlowException.class, () ->
             tagbody((tagbody) -> go(tagbody, tag)));

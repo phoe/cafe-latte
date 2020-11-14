@@ -9,62 +9,76 @@ import static systems.raptor.cafe_latte.conditions.Handler.signal;
 
 class HandlerBindTest {
 
-  @Test
-  public void HandlerBindMultipleHandlerTest() {
-    var ref = new Object() {
-      int counter = 0;
-    };
-    Handler<Void> handler1 = new Handler<>(Condition.class,
-            (condition) -> {
-              ref.counter = ref.counter + 1;
-              return null;
-            });
-    Handler<Void> handler2 = new Handler<>(Condition.class,
-            (condition) -> {
-              ref.counter = ref.counter * 20;
-              return null;
-            });
-    Handler<Void> handler3 = new Handler<>(Condition.class,
-            (condition) -> {
-              ref.counter = ref.counter - 15;
-              return null;
-            });
-    int returnValue = new HandlerBind<>(List.of(handler1, handler2, handler3), () -> {
-      signal(new Condition());
-      return 42;
-    }).get();
-    assertEquals(42, returnValue);
-    assertEquals(5, ref.counter);
+  private static class Counter {
+    int counter;
   }
 
-  static class TestCondition extends Condition {}
-
   @Test
-  public void HandlerBindInheritanceTest() {
-    var ref = new Object() {
-      int counter = 0;
-    };
-    Handler<Void> handler1 = new Handler<>(Condition.class,
-            (condition) -> {
-              ref.counter = ref.counter + 1;
-              return null;
-            });
-    Handler<Void> handler2 = new Handler<>(TestCondition.class,
-            (condition) -> {
-              ref.counter = ref.counter * 20;
-              return null;
-            });
-    Handler<Void> handler3 = new Handler<>(Condition.class,
-            (condition) -> {
-              ref.counter = ref.counter - 15;
-              return null;
-            });
-    int returnValue = new HandlerBind<>(List.of(handler1, handler2, handler3), () -> {
+  public void handlerBindMultipleHandlerTest() {
+    var counter = new Counter();
+    int returnValue = new HandlerBind<>(List.of(
+            makeAdditionHandler(Condition.class, counter, 1, false),
+            makeMultiplicationHandler(Condition.class, counter, 20, false),
+            makeAdditionHandler(Condition.class, counter, -15, false)), () -> {
       signal(new Condition());
       return 42;
     }).get();
     assertEquals(42, returnValue);
-    assertEquals(-14, ref.counter);
+    assertEquals(5, counter.counter);
+  }
+
+  private static class TestCondition extends Condition {}
+
+  @Test
+  public void handlerBindInheritanceTest() {
+    var counter = new Counter();
+    new HandlerBind<>(List.of(
+            makeAdditionHandler(Condition.class, counter, 1, false),
+            makeMultiplicationHandler(TestCondition.class, counter, 20, false),
+            makeAdditionHandler(Condition.class, counter, -15, false)), () -> {
+      signal(new Condition());
+      return 42;
+    }).get();
+    assertEquals(-14, counter.counter);
+  }
+
+  @Test
+  public void handlerBindNestedResignalTest() {
+    var counter = new Counter();
+    new HandlerBind<Void>(List.of(makeAdditionHandler(Condition.class, counter, 1, true)), () -> {
+      new HandlerBind<Void>(List.of(makeAdditionHandler(Condition.class, counter, 10, true)), () -> {
+        new HandlerBind<Void>(List.of(makeAdditionHandler(Condition.class, counter, 100, true)), () -> {
+          new HandlerBind<Void>(List.of(makeAdditionHandler(Condition.class, counter, 1000, true)), () -> {
+          signal(new Condition());
+            return null;
+          }).get();
+          return null;
+        }).get();
+        return null;
+      }).get();
+      return null;
+    }).get();
+    assertEquals(1248, counter.counter);
+  }
+
+  @SuppressWarnings("SameParameterValue")
+  private Handler<Void> makeAdditionHandler(Class<? extends Condition> conditionClass,
+                                            Counter counter, int amount, boolean resignal) {
+    return new Handler<>(conditionClass, (condition) -> {
+      counter.counter += amount;
+      if (resignal) signal(condition);
+      return null;
+    });
+  }
+
+  @SuppressWarnings("SameParameterValue")
+  private Handler<Void> makeMultiplicationHandler(Class<? extends Condition> conditionClass,
+                                                  Counter counter, int amount, boolean resignal) {
+    return new Handler<>(conditionClass, (condition) -> {
+      counter.counter *= amount;
+      if (resignal) signal(condition);
+      return null;
+    });
   }
 
 }
