@@ -12,7 +12,10 @@ class HandlerCaseTest {
 
   @Test
   public void HandlerCaseNoHandlersTest() {
-    HandlerCase<String> handlerCase = new HandlerCase<>(List.of(), () -> "bar");
+    HandlerCase<String> handlerCase = new HandlerCase<>(List.of(), () -> {
+      signal(new Condition());
+      return "bar";
+    });
     String returnValue = handlerCase.get();
     assertEquals("bar", returnValue);
   }

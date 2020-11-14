@@ -15,6 +15,17 @@ class HandlerBindTest {
   }
 
   @Test
+  public void handlerBindNoHandlerTest() {
+    var counter = new Counter();
+    int returnValue = new HandlerBind<>(List.of(), () -> {
+      signal(new Condition());
+      return 42;
+    }).get();
+    assertEquals(42, returnValue);
+    assertEquals(0, counter.counter);
+  }
+
+  @Test
   public void handlerBindMultipleHandlerTest() {
     var counter = new Counter();
     int returnValue = new HandlerBind<>(List.of(
