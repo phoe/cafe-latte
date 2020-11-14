@@ -18,8 +18,14 @@ This is an attempt to recreate some nifty Common Lisp features in plain Java. Th
   * Implemented in the `Grasp` class.
   * Unit tests done.
 * [X] Conditions
+  * Implemented in the `Condition` class.
+  * Subtypes of `RuntimeException`.
+  * Do not fill in the stack trace when instantiated; see the `makeReadyToThrow()` method.
 * [X] Handlers
+  * Implemented in the `Handler` class.
 * [X] `handler-bind`
+  * Implemented in the `HandlerBind` class.
+  * Unit tests done.
 * [ ] `handler-case`
 * [ ] `#'signal`
 * [ ] Restarts
