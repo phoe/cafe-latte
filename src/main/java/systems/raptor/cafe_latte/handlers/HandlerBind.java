@@ -1,25 +1,27 @@
-package systems.raptor.cafe_latte.conditions;
+package systems.raptor.cafe_latte.handlers;
 
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static systems.raptor.cafe_latte.conditions.Handler.handlerClusters;
+import static systems.raptor.cafe_latte.handlers.Handler.handlerClusters;
 import static systems.raptor.cafe_latte.dynamic_variables.DynamicVariable.bind;
 
-@SuppressWarnings("rawtypes")
 public class HandlerBind<T> implements Supplier<T> {
 
   private final Supplier<T> body;
+  @SuppressWarnings("rawtypes")
   private final List<Handler> handlers;
 
+  @SuppressWarnings("rawtypes")
   public HandlerBind(List<Handler> handlers, Supplier<T> body) {
     this.handlers = handlers;
     this.body = body;
   }
 
   @Override
+  @SuppressWarnings("rawtypes")
   public T get() {
     var ref = new Object() {
       T returnValue;

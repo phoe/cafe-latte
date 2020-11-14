@@ -8,11 +8,17 @@ import java.util.function.Consumer;
 
 public class Tagbody implements Consumer<Tagbody> {
 
-  private final List<TagbodyElement> elements;
+  private List<TagbodyElement> elements;
 
   private boolean valid;
 
+  public Tagbody() {}
+
   public Tagbody(TagbodyElement... elements) {
+    setElements(elements);
+  }
+
+  public void setElements(TagbodyElement... elements) {
     this.elements = Arrays.asList(elements);
     for (TagbodyElement element : elements) {
       if (element instanceof TagbodyTag) {

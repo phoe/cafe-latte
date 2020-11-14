@@ -7,11 +7,17 @@ import java.util.function.Supplier;
 
 public class Block<T> implements Supplier<T> {
 
-  private final Function<Block<T>, T> function;
+  private Function<Block<T>, T> function;
 
   private boolean valid;
 
+  public Block() {}
+
   public Block(Function<Block<T>, T> function) {
+    setFunction(function);
+  }
+
+  public void setFunction(Function<Block<T>, T> function) {
     this.function = function;
   }
 

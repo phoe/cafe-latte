@@ -28,7 +28,9 @@ This is an attempt to recreate some nifty Common Lisp features in plain Java. Th
 * [X] `handler-bind`
   * Implemented in the `HandlerBind` class.
   * Unit tests done.
-* [ ] `handler-case`
+* [X] `handler-case`
+  * Implemented in the `HandlerCase` class.
+  * *Some* unit tests done.
 * [ ] Restarts
 * [ ] `restart-bind`
 * [ ] `restart-case`

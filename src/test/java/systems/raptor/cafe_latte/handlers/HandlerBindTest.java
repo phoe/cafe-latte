@@ -1,11 +1,12 @@
-package systems.raptor.cafe_latte.conditions;
+package systems.raptor.cafe_latte.handlers;
 
 import org.junit.jupiter.api.Test;
+import systems.raptor.cafe_latte.conditions.Condition;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static systems.raptor.cafe_latte.conditions.Handler.signal;
+import static systems.raptor.cafe_latte.handlers.Handler.signal;
 
 class HandlerBindTest {
 
