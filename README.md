@@ -17,9 +17,9 @@ This is an attempt to recreate some nifty Common Lisp features in plain Java. Th
   * Because of Java naming conflicts, `catch`/`throw` are renamed to `grasp`/`fling`.
   * Implemented in the `Grasp` class.
   * Unit tests done.
-* [ ] Conditions
-* [ ] Handlers
-* [ ] `handler-bind`
+* [X] Conditions
+* [X] Handlers
+* [X] `handler-bind`
 * [ ] `handler-case`
 * [ ] `#'signal`
 * [ ] Restarts

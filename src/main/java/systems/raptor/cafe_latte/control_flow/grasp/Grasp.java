@@ -33,11 +33,11 @@ public class Grasp<T> implements Supplier<T> {
     bind(activeTags, newActiveTags, () -> {
       try {
         ref.returnValue = supplier.get();
-      } catch (Fling rf) {
-        if (rf.getTag() == tag) {
-          ref.returnValue = (T) rf.getValue();
+      } catch (Fling fling) {
+        if (fling.getTag() == tag) {
+          ref.returnValue = (T) fling.getValue();
         } else {
-          throw rf;
+          throw fling;
         }
       }
     });
