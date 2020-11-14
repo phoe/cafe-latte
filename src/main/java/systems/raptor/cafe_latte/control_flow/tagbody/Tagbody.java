@@ -14,6 +14,11 @@ public class Tagbody implements Consumer<Tagbody> {
 
   public Tagbody(TagbodyElement... elements) {
     this.elements = Arrays.asList(elements);
+    for (TagbodyElement element : elements) {
+      if (element instanceof TagbodyTag) {
+        ((TagbodyTag) element).associate(this);
+      }
+    }
   }
 
   @Override
@@ -51,9 +56,11 @@ public class Tagbody implements Consumer<Tagbody> {
   }
 
   public static void go(Tagbody tagbody, TagbodyTag tag) {
-    if (!tagbody.valid) {
+    if (!(tagbody == tag.associatedTagbody)) {
+      throw new ControlFlowException("Attempted to go() to a tag not associated with a given tagbody");
+    } else if (!tagbody.valid) {
       throw new ControlFlowException("Attempted to go() to a tagbody that is no longer in scope");
-    } else {
+    } else  {
       throw new Go(tag);
     }
   }

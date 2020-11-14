@@ -64,9 +64,16 @@ class TagbodyTest {
 
   @Test
   public void TagbodyControlFlowExceptionTest() {
-    Tagbody tagbody = new Tagbody();
     TagbodyTag tag = tag();
+    Tagbody tagbody = new Tagbody(tag);
     assertThrows(ControlFlowException.class, () -> go(tagbody, tag));
+  }
+
+  @Test
+  public void TagbodyInvalidAssociationExceptionTest() {
+    TagbodyTag tag = tag();
+    assertThrows(ControlFlowException.class, () ->
+            tagbody((tagbody) -> go(tagbody, tag)));
   }
 
 }
