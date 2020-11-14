@@ -69,4 +69,25 @@ class HandlerCaseTest {
     String returnValue = handlerCase.get();
     assertEquals("bar", returnValue);
   }
+
+  @Test
+  public void HandlerCaseUnwindOrderTest() {
+    var ref = new Object() {
+      int counter = 0;
+    };
+    Handler<Void> handler = new Handler<>(Condition.class, (condition) -> {
+      ref.counter *= 2;
+      return null;
+    });
+    new HandlerCase<>(List.of(handler), () -> {
+      try {
+        signal(new Condition());
+      } finally {
+        ref.counter += 10;
+      }
+      return null;
+    }).get();
+    assertEquals(20, ref.counter);
+  }
+
 }
