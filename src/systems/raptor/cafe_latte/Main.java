@@ -50,18 +50,17 @@ public class Main {
       boolean continueRunning = true;
     };
     TagbodyTag tag1 = tag(), tag2 = tag();
-    TagbodyElement code1 = (tagbody) -> {
-      if (ref.continueRunning) {
-        ref.continueRunning = false;
-        go(tagbody, tag1);
-      } else {
-        go(tagbody, tag2);
-      }
-    };
     tagbody((tagbody) -> System.out.println("Hello world!"),
             tag1,
             (tagbody) -> System.out.println("This should get printed twice"),
-            code1,
+            (tagbody) -> {
+              if (ref.continueRunning) {
+                ref.continueRunning = false;
+                go(tagbody, tag1);
+              } else {
+                go(tagbody, tag2);
+              }
+            },
             (tagbody) -> System.out.println("This will not get printed"),
             tag2,
             (tagbody) -> System.out.println("Goodbye world!"));
