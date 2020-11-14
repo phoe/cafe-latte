@@ -18,28 +18,26 @@ public class Tagbody implements Consumer<Tagbody> {
   @Override
   public void accept(Tagbody tagbody) {
     valid = true;
-    Map.Entry<Boolean, Integer> result = new AbstractMap.SimpleEntry<>(true, 0);
-    while (result.getKey()) {
-      result = runHelper(result.getValue());
+    int startFrom = 0;
+    boolean keepGoing = true;
+    while (keepGoing) {
+      try {
+        for (int i = startFrom; i < elements.size(); ++i) {
+          TagbodyElement element = elements.get(i);
+          element.accept(this);
+        }
+        keepGoing = false;
+      } catch (Go go) {
+        TagbodyTag tag = (TagbodyTag) go.getTag();
+        if (elements.contains(tag)) {
+          startFrom = elements.indexOf(tag);
+        } else {
+          valid = false;
+          throw go;
+        }
+      }
     }
     valid = false;
-  }
-
-  private Map.Entry<Boolean, Integer> runHelper(int startPosition) {
-    try {
-      for (int i = startPosition; i < elements.size(); ++i) {
-        TagbodyElement element = elements.get(i);
-        element.accept(this);
-      }
-      return new AbstractMap.SimpleEntry<>(false, elements.size());
-    } catch (Go go) {
-      TagbodyTag tag = (TagbodyTag) go.getTag();
-      if (elements.contains(tag)) {
-        return new AbstractMap.SimpleEntry<>(true, elements.indexOf(tag));
-      } else {
-        throw go;
-      }
-    }
   }
 
   public static void tagbody(TagbodyElement... elements) {

@@ -24,11 +24,12 @@ public class Block<T> implements Supplier<T> {
     valid = true;
     try {
       ref.returnValue = function.apply(this);
-    } catch (ReturnFrom rf) {
-      if (rf.getTag() == this) {
-        ref.returnValue = (T) rf.getValue();
+    } catch (ReturnFrom returnFrom) {
+      if (returnFrom.getTag() == this) {
+        ref.returnValue = (T) returnFrom.getValue();
       } else {
-        throw rf;
+        valid = false;
+        throw returnFrom;
       }
     }
     valid = false;
