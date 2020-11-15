@@ -1,6 +1,5 @@
-package systems.raptor.cafe_latte.handlers;
+package systems.raptor.cafe_latte.restarts;
 
-import systems.raptor.cafe_latte.conditions.Condition;
 import systems.raptor.cafe_latte.control_flow.block.Block;
 import systems.raptor.cafe_latte.control_flow.tagbody.Tagbody;
 import systems.raptor.cafe_latte.control_flow.tagbody.TagbodyElement;
@@ -14,24 +13,24 @@ import static systems.raptor.cafe_latte.control_flow.block.Block.returnFrom;
 import static systems.raptor.cafe_latte.control_flow.tagbody.Tagbody.go;
 import static systems.raptor.cafe_latte.control_flow.tagbody.Tagbody.tag;
 
-public class HandlerCase<T> implements Supplier<T> {
+public class RestartCase<T, R> implements Supplier<R> {
 
-  private final Supplier<T> body;
-  private final List<Handler<T>> handlers;
-  private final Block<T> block;
+  private final Supplier<R> body;
+  private final List<Restart<T, R>> restarts;
+  private final Block<R> block;
 
-  public HandlerCase(List<Handler<T>> handlers, Supplier<T> body) {
-    this.handlers = handlers;
+  public RestartCase(List<Restart<T, R>> restarts, Supplier<R> body) {
+    this.restarts = restarts;
     this.body = body;
     block = generateBlock();
   }
 
-  static class ConditionStorage {
-    Condition transferredCondition;
+  static class argumentStorage {
+    Object transferredArgument;
   }
 
-  private Block<T> generateBlock (){
-    Block<T> block = new Block<>();
+  private Block<R> generateBlock() {
+    Block<R> block = new Block<>();
     Tagbody tagbody = generateTagbody(block);
     block.setFunction((block1) -> {
       tagbody.accept(tagbody);
@@ -40,32 +39,34 @@ public class HandlerCase<T> implements Supplier<T> {
     return block;
   }
 
-  private Tagbody generateTagbody(Block<T> block) {
-    ConditionStorage conditionStorage = new ConditionStorage();
+  @SuppressWarnings("unchecked")
+  private Tagbody generateTagbody(Block<R> block) {
+    argumentStorage argumentStorage = new argumentStorage();
     List<TagbodyElement> tagbodyElements = new LinkedList<>();
-    List<Handler<Object>> trampolineHandlers = new LinkedList<>();
+    List<Restart<Object, Object>> trampolineRestarts = new LinkedList<>();
     Tagbody tagbody = new Tagbody();
-    tagbodyElements.add((tagbody1) -> new HandlerBind<T>(trampolineHandlers, () -> {
+    tagbodyElements.add((tagbody1) -> new RestartBind<R>(trampolineRestarts, () -> {
       returnFrom(block, body.get());
       return null;
     }).get());
-    for (Handler<T> handler : handlers) {
+    for (Restart<T, R> restart : restarts) {
       TagbodyTag tag = tag();
-      trampolineHandlers.add(new Handler<>(handler.getConditionClass(), (condition) -> {
-        conditionStorage.transferredCondition = condition;
+      trampolineRestarts.add(new Restart<>(restart.getName(), (argument) -> {
+        argumentStorage.transferredArgument = argument;
         go(tagbody, tag);
         return null;
-      }));
+      }, restart.getReportFunction(), (Supplier<Object>) restart.getInteractiveFunction(),
+              restart.getTestFunction()));
       tagbodyElements.add(tag);
       tagbodyElements.add((tagbody1) ->
-              returnFrom(block, handler.apply(conditionStorage.transferredCondition)));
+              returnFrom(block, restart.apply((T) argumentStorage.transferredArgument)));
     }
     tagbody.setElements(tagbodyElements.toArray(new TagbodyElement[]{}));
     return tagbody;
   }
 
   @Override
-  public T get() {
+  public R get() {
     return block.get();
   }
 }

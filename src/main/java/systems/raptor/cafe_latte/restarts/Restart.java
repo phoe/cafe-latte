@@ -35,6 +35,18 @@ public class Restart<R, T> implements Function<R, T> {
     return reportFunction.get();
   }
 
+  Supplier<String> getReportFunction() {
+    return reportFunction;
+  }
+
+  Supplier<R> getInteractiveFunction() {
+    return interactiveFunction;
+  }
+
+  Function<Condition, Boolean> getTestFunction() {
+    return testFunction;
+  }
+
   public Restart(String name, Function<R, T> function) {
     this(name, function, name);
   }
