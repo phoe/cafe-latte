@@ -74,6 +74,20 @@ class HandlerBindTest {
     assertEquals(1248, counter.counter);
   }
 
+  @Test
+  public void handlerBindNonNestedResignalTest() {
+    var counter = new Counter();
+    new HandlerBind<Void>(List.of(
+            makeAdditionHandler(Condition.class, counter, 1, true),
+            makeAdditionHandler(Condition.class, counter, 10, true),
+            makeAdditionHandler(Condition.class, counter, 100, true),
+            makeAdditionHandler(Condition.class, counter, 1000, true)), () -> {
+      signal(new Condition());
+      return null;
+    }).get();
+    assertEquals(1111, counter.counter);
+  }
+
   @SuppressWarnings("SameParameterValue")
   private Handler<Object> makeAdditionHandler(Class<? extends Condition> conditionClass,
                                               Counter counter, int amount, boolean resignal) {
