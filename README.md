@@ -52,6 +52,12 @@ AGPLv3. (Unless you are [**@easye**](https://github.com/easye), at which point i
   * Implemented in the `Handler` class.
 * [X] `#'signal`
   * Implemented in the `Handler` class as a static method.
+* [X] `#'warn`
+  * Implemented in the `Handler` class as a static method.
+  * Unit tests done.
+* [X] `#'error`
+  * Implemented in the `Handler` class as a static method.
+  * Unit tests done.
 * [X] `handler-bind`
   * Implemented in the `HandlerBind` class.
   * Unit tests done.
@@ -76,12 +82,6 @@ AGPLv3. (Unless you are [**@easye**](https://github.com/easye), at which point i
 
 ## What's TODO
 
-* [ ] `#'warn`
-  * Implemented in the `Handler` class as a static method.
-  * Unit tests **NOT** yet done.
-* [ ] `#'error`
-  * Implemented in the `Handler` class as a static method.
-  * Unit tests **NOT** yet done.
 * [ ] Debugger
 * [ ] JShell as debugger REPL
 
