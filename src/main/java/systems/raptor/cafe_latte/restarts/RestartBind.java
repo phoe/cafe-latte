@@ -8,20 +8,20 @@ import java.util.stream.Stream;
 import static systems.raptor.cafe_latte.dynamic_variables.DynamicVariable.bind;
 import static systems.raptor.cafe_latte.restarts.Restart.restartClusters;
 
-public class RestartBind<T> implements Supplier<T> {
+public class RestartBind<T, R> implements Supplier<R> {
 
-  private final Supplier<T> body;
+  private final Supplier<R> body;
   private final List<Restart<Object, Object>> restarts;
 
-  public RestartBind(List<Restart<Object, Object>> restarts, Supplier<T> body) {
+  public RestartBind(List<Restart<Object, Object>> restarts, Supplier<R> body) {
     this.restarts = restarts;
     this.body = body;
   }
 
   @Override
-  public T get() {
+  public R get() {
     var ref = new Object() {
-      T returnValue;
+      R returnValue;
     };
     List<List<Restart<Object, Object>>> newClusters =
             Stream.concat(Stream.of(restarts), restartClusters.get().stream())

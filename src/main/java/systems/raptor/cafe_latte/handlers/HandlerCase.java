@@ -51,11 +51,12 @@ public class HandlerCase<T> implements Supplier<T> {
     }).get());
     for (Handler<T> handler : handlers) {
       TagbodyTag tag = tag();
-      trampolineHandlers.add(new Handler<>(handler.getConditionClass(), (condition) -> {
+      Handler<Object> newHandler = new Handler<>(handler.getConditionClass(), (condition) -> {
         conditionStorage.transferredCondition = condition;
         go(tagbody, tag);
         return null;
-      }));
+      });
+      trampolineHandlers.add(newHandler);
       tagbodyElements.add(tag);
       tagbodyElements.add((tagbody1) ->
               returnFrom(block, handler.apply(conditionStorage.transferredCondition)));

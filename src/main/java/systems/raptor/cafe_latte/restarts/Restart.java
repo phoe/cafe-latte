@@ -11,7 +11,6 @@ import java.util.function.Supplier;
 
 public class Restart<R, T> implements Function<R, T> {
 
-  @SuppressWarnings("rawtypes")
   final static DynamicVariable<List<List<Restart<Object, Object>>>> restartClusters
           = new DynamicVariable<>(new LinkedList<>(new LinkedList<>()));
 

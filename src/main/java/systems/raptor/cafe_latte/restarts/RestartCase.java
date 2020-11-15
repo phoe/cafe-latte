@@ -45,18 +45,19 @@ public class RestartCase<T, R> implements Supplier<R> {
     List<TagbodyElement> tagbodyElements = new LinkedList<>();
     List<Restart<Object, Object>> trampolineRestarts = new LinkedList<>();
     Tagbody tagbody = new Tagbody();
-    tagbodyElements.add((tagbody1) -> new RestartBind<R>(trampolineRestarts, () -> {
+    tagbodyElements.add((tagbody1) -> new RestartBind<T, R>(trampolineRestarts, () -> {
       returnFrom(block, body.get());
       return null;
     }).get());
     for (Restart<T, R> restart : restarts) {
       TagbodyTag tag = tag();
-      trampolineRestarts.add(new Restart<>(restart.getName(), (argument) -> {
+      Restart<Object, Object> newRestart = new Restart<>(restart.getName(), (argument) -> {
         argumentStorage.transferredArgument = argument;
         go(tagbody, tag);
         return null;
       }, restart.getReportFunction(), (Supplier<Object>) restart.getInteractiveFunction(),
-              restart.getTestFunction()));
+              restart.getTestFunction());
+      trampolineRestarts.add(newRestart);
       tagbodyElements.add(tag);
       tagbodyElements.add((tagbody1) ->
               returnFrom(block, restart.apply((T) argumentStorage.transferredArgument)));

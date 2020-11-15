@@ -23,9 +23,10 @@ public class HandlerBind<T> implements Supplier<T> {
     var ref = new Object() {
       T returnValue;
     };
+    var stream1 = Stream.of(handlers);
+    var stream2 = handlerClusters.get().stream();
     List<List<Handler<Object>>> newClusters =
-            Stream.concat(Stream.of(handlers), handlerClusters.get().stream())
-                    .collect(Collectors.toList());
+            Stream.concat(stream1, stream2).collect(Collectors.toList());
     bind(handlerClusters, newClusters, () -> ref.returnValue = body.get());
     return ref.returnValue;
   }
