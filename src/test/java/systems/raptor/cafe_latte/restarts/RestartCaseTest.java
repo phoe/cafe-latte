@@ -42,12 +42,9 @@ class RestartCaseTest {
     String returnValue = restartCase.get();
     assertNotNull(ref.restarts);
     assertEquals(3, ref.restarts.size());
-    // FIXME - this does not work. Strong equality should hold for restarts though.
-    // Preferably modify the restarts to perform a transfer of control instead
-    // and arrange to have their bodies executed after the transfer was made.
-    // assertEquals(restart1, ref.restarts.get(0));
-    // assertEquals(restart2, ref.restarts.get(1));
-    // assertEquals(restart3, ref.restarts.get(2));
+    assertEquals(restart1, ref.restarts.get(0));
+    assertEquals(restart2, ref.restarts.get(1));
+    assertEquals(restart3, ref.restarts.get(2));
     assertEquals("ABORT", ref.restarts.get(0).getName());
     assertEquals("RETRY", ref.restarts.get(1).getName());
     assertEquals("FAIL", ref.restarts.get(2).getName());
@@ -75,12 +72,9 @@ class RestartCaseTest {
     }).get();
     assertNotNull(ref.restarts);
     assertEquals(3, ref.restarts.size());
-    // FIXME - this does not work. Strong equality should hold for restarts though.
-    // Preferably modify the restarts to perform a transfer of control instead
-    // and arrange to have their bodies executed after the transfer was made.
-    // assertEquals(restart1, ref.restarts.get(0));
-    // assertEquals(restart2, ref.restarts.get(1));
-    // assertEquals(restart3, ref.restarts.get(2));
+    assertEquals(restart1, ref.restarts.get(0));
+    assertEquals(restart2, ref.restarts.get(1));
+    assertEquals(restart3, ref.restarts.get(2));
     assertEquals("ABORT", ref.restarts.get(0).getName());
     assertEquals("RETRY", ref.restarts.get(1).getName());
     assertEquals("FAIL", ref.restarts.get(2).getName());

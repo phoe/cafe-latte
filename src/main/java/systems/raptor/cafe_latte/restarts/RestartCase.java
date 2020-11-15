@@ -4,6 +4,7 @@ import systems.raptor.cafe_latte.control_flow.block.Block;
 import systems.raptor.cafe_latte.control_flow.tagbody.Tagbody;
 import systems.raptor.cafe_latte.control_flow.tagbody.TagbodyElement;
 import systems.raptor.cafe_latte.control_flow.tagbody.TagbodyTag;
+import systems.raptor.cafe_latte.restarts.Restart.ArgumentStorage;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -25,10 +26,6 @@ public class RestartCase<T, R> implements Supplier<T> {
     block = generateBlock();
   }
 
-  static class argumentStorage {
-    Object transferredArgument;
-  }
-
   private Block<T> generateBlock() {
     Block<T> block = new Block<>();
     Tagbody tagbody = generateTagbody(block);
@@ -39,28 +36,21 @@ public class RestartCase<T, R> implements Supplier<T> {
     return block;
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "rawtypes"})
   private Tagbody generateTagbody(Block<T> block) {
-    argumentStorage argumentStorage = new argumentStorage();
+    ArgumentStorage argumentStorage = new ArgumentStorage();
     List<TagbodyElement> tagbodyElements = new LinkedList<>();
-    List<Restart<Object, Object>> trampolineRestarts = new LinkedList<>();
     Tagbody tagbody = new Tagbody();
-    tagbodyElements.add((tagbody1) -> new RestartBind<T>(trampolineRestarts, () -> {
+    tagbodyElements.add((tagbody1) -> new RestartBind<T>((List) restarts, () -> {
       returnFrom(block, body.get());
       return null;
     }).get());
     for (Restart<R, T> restart : restarts) {
       TagbodyTag tag = tag();
-      Restart<R, T> newRestart = new Restart<>(restart.getName(), (argument) -> {
-        argumentStorage.transferredArgument = argument;
-        go(tagbody, tag);
-        return null;
-      }, restart.getReportFunction(), restart.getInteractiveFunction(),
-              restart.getTestFunction());
-      trampolineRestarts.add((Restart<Object, Object>) newRestart);
+      restart.trampolineTo(argumentStorage, tagbody, tag);
+      Supplier<T> supplier = () -> restart.getFunction().apply((R) argumentStorage.transferredArgument);
       tagbodyElements.add(tag);
-      tagbodyElements.add((tagbody1) ->
-              returnFrom(block, restart.apply((R) argumentStorage.transferredArgument)));
+      tagbodyElements.add((tagbody1) -> returnFrom(block, supplier.get()));
     }
     tagbody.setElements(tagbodyElements.toArray(new TagbodyElement[]{}));
     return tagbody;

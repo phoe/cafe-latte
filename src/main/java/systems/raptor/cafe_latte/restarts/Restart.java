@@ -1,13 +1,16 @@
 package systems.raptor.cafe_latte.restarts;
 
 import systems.raptor.cafe_latte.conditions.Condition;
+import systems.raptor.cafe_latte.control_flow.tagbody.Tagbody;
+import systems.raptor.cafe_latte.control_flow.tagbody.TagbodyTag;
 import systems.raptor.cafe_latte.dynamic_variables.DynamicVariable;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import static systems.raptor.cafe_latte.control_flow.tagbody.Tagbody.go;
 
 public class Restart<R, T> implements Function<R, T> {
 
@@ -32,6 +35,10 @@ public class Restart<R, T> implements Function<R, T> {
 
   public String getReport() {
     return reportFunction.get();
+  }
+
+  Function<R, T> getFunction() {
+    return function;
   }
 
   Supplier<String> getReportFunction() {
@@ -68,6 +75,36 @@ public class Restart<R, T> implements Function<R, T> {
             (condition == null || associatedConditions.isEmpty() || associatedConditions.contains(condition));
   }
 
+  static class ArgumentStorage {
+    Object transferredArgument;
+  }
+
+  // Trampoline mechanism (for RestartCase)
+  // Required to preserve identity of restart objects - see https://github.com/phoe/cafe-latte/issues/4
+
+  private ArgumentStorage argumentStorage = null;
+  private Tagbody tagbody = null;
+  private TagbodyTag trampolineTag = null;
+  private boolean shouldTrampoline = false;
+
+  void trampolineTo(ArgumentStorage argumentStorage, Tagbody tagbody, TagbodyTag tag) {
+    this.argumentStorage = argumentStorage;
+    this.tagbody = tagbody;
+    this.trampolineTag = tag;
+    this.shouldTrampoline = true;
+  }
+
+  @Override
+  public T apply(R argument) {
+    if (shouldTrampoline) {
+      shouldTrampoline = false;
+      argumentStorage.transferredArgument = argument;
+      go(tagbody, trampolineTag);
+      return null;
+    } else {
+      return function.apply(argument);
+    }
+  }
   // Static methods
 
   @SuppressWarnings({"rawtypes", "unchecked"})
@@ -166,8 +203,4 @@ public class Restart<R, T> implements Function<R, T> {
     return findRestartHelper(name, Restart::invokeRestartInteractively);
   }
 
-  @Override
-  public T apply(R argument) {
-    return function.apply(argument);
-  }
 }
