@@ -179,6 +179,11 @@ public class Restart<R, T> implements Function<R, T> {
     return restart.apply(argument);
   }
 
+  @SuppressWarnings({"rawtypes"})
+  public static Object invokeRestart(Restart restart) {
+    return invokeRestart(restart, null);
+  }
+
   @SuppressWarnings({"rawtypes", "unchecked"})
   public static Object invokeRestartInteractively(Restart restart) {
     Object argument = restart.interactiveFunction.get();

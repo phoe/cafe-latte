@@ -36,9 +36,9 @@ class RestartCaseTest {
     Restart<String, String> restart3 = new Restart<>("FAIL", (x) -> "baz");
     RestartCase<String, String> restartCase =
             new RestartCase<>(List.of(restart1, restart2, restart3), () -> {
-      ref.restarts = computeRestarts();
-      return "quux";
-    });
+              ref.restarts = computeRestarts();
+              return "quux";
+            });
     String returnValue = restartCase.get();
     assertNotNull(ref.restarts);
     assertEquals(3, ref.restarts.size());
@@ -81,13 +81,56 @@ class RestartCaseTest {
   }
 
   @Test
-  public void restartCaseTransferTest() {
+  public void restartCaseTransferInvokeByNameTest() {
     Restart<String, String> restart = new Restart<>("ABORT", (x) -> "foo");
     String returnValue =
             new RestartCase<>(List.of(restart), () -> {
-              invokeRestart(findRestart("ABORT"), null);
+              invokeRestart(findRestart("ABORT"));
               return "bar";
             }).get();
     assertEquals("foo", returnValue);
   }
+
+  @Test
+  public void restartCaseTransferInvokeByReferenceTest() {
+    Restart<String, String> restart = new Restart<>("ABORT", (x) -> "foo");
+    String returnValue =
+            new RestartCase<>(List.of(restart), () -> {
+              invokeRestart(findRestart(restart));
+              return "bar";
+            }).get();
+    assertEquals("foo", returnValue);
+  }
+
+  @Test
+  public void restartCaseTransferInvokeByDirectReferenceTest() {
+    Restart<String, String> restart = new Restart<>("ABORT", (x) -> "foo");
+    String returnValue =
+            new RestartCase<>(List.of(restart), () -> {
+              invokeRestart(restart);
+              return "bar";
+            }).get();
+    assertEquals("foo", returnValue);
+  }
+
+  @Test
+  public void restartCaseUnwindOrderTest() {
+    var ref = new Object() {
+      int counter = 0;
+    };
+    Restart<Void, Void> restart = new Restart<>("ABORT", (x) -> {
+      ref.counter *= 2;
+      return null;
+    });
+    new RestartCase<>(List.of(restart), () -> {
+      try {
+        invokeRestart(restart);
+      } finally {
+        ref.counter += 10;
+      }
+      return null;
+    }).get();
+    assertEquals(20, ref.counter);
+  }
+
 }
