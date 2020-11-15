@@ -50,6 +50,8 @@ Seriously, though, this library is not yet documented or complete; take a look a
   * Implemented in the `HandlerCase` class.
   * Unit tests done.
 * [ ] Restarts
+  * Implemented in the `Restart` class.
+  * Unit tests **NOT** yet done.
 * [ ] `restart-bind`
 * [ ] `restart-case`
 * [ ] Debugger
