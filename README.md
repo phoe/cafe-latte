@@ -10,7 +10,7 @@
 
 ## About
 
-This is an attempt to recreate some nifty Common Lisp features in plain Java. These are, most importantly, the foundations for a condition system, and a simple condition system itself.
+This is an implementation of Common Lisp dynamic variables, control flow operators, and condition system in plain Java.
 
 Each part of Common Lisp implemented here should have basic unit test coverage.
 
