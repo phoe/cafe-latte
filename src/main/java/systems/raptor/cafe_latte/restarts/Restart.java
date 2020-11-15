@@ -99,6 +99,11 @@ public class Restart<R, T> implements Function<R, T> {
     return result;
   }
 
+  @SuppressWarnings("rawtypes")
+  public static List<Restart> computeRestarts() {
+    return computeRestarts(null);
+  }
+
   @SuppressWarnings({"rawtypes"})
   public static Restart findRestart(String name, Condition condition) {
     for (List<Restart<Object, Object>> cluster : restartClusters.get()) {

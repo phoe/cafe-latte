@@ -43,7 +43,7 @@ class RestartTest {
             () -> "bar", () -> 24, (condition) -> true);
     List<List<Restart<Integer, String>>> newClusters = List.of(List.of(restart));
     bind(Restart.restartClusters, newClusters, () -> {
-      List<Restart> restarts = computeRestarts(null);
+      List<Restart> restarts = computeRestarts();
       assertEquals(1, restarts.size());
       assertEquals(restart, restarts.get(0));
       assertEquals(restart, findRestart("CONTINUE"));
@@ -65,6 +65,9 @@ class RestartTest {
       assertEquals(restart, findRestart(restart, condition1));
       assertEquals(restart, findRestart("CONTINUE", condition2));
       assertEquals(restart, findRestart(restart, condition2));
+      assertEquals(1, computeRestarts().size());
+      assertEquals(1, computeRestarts(condition1).size());
+      assertEquals(1, computeRestarts(condition2).size());
       withConditionRestarts(condition1, List.of(restart), () -> {
         assertEquals(restart, findRestart("CONTINUE"));
         assertEquals(restart, findRestart(restart));
@@ -72,6 +75,9 @@ class RestartTest {
         assertEquals(restart, findRestart(restart, condition1));
         assertNull(findRestart("CONTINUE", condition2));
         assertNull(findRestart(restart, condition2));
+        assertEquals(1, computeRestarts().size());
+        assertEquals(1, computeRestarts(condition1).size());
+        assertEquals(0, computeRestarts(condition2).size());
       });
       assertEquals(restart, findRestart("CONTINUE"));
       assertEquals(restart, findRestart(restart));
@@ -79,6 +85,9 @@ class RestartTest {
       assertEquals(restart, findRestart(restart, condition1));
       assertEquals(restart, findRestart("CONTINUE", condition2));
       assertEquals(restart, findRestart(restart, condition2));
+      assertEquals(1, computeRestarts().size());
+      assertEquals(1, computeRestarts(condition1).size());
+      assertEquals(1, computeRestarts(condition2).size());
     });
   }
 
