@@ -16,9 +16,9 @@ This is an implementation of Common Lisp dynamic variables, control flow operato
 
 This library is not yet documented, but the respective implementations should behave analogously to their Common Lisp counterparts; see the [Common Lisp HyperSpec](http://clhs.lisp.se/) for their descriptions.
 
-The best examples that show use of the various constructs [implemented](src/main/java/systems/raptor/cafe_latte) here is the [test directory](src/test/java/systems/raptor/cafe_latte) containing unit tests for all of the implemented mechanisms.
+Example uses of the various constructs [implemented](src/main/java/systems/raptor/cafe_latte) here are present in the [test directory](src/test/java/systems/raptor/cafe_latte), containing unit tests for all the present mechanisms.
 
-A stable release will be made when the authors are satisfied enough with its functioning.
+A stable release of this library will be made when the authors are satisfied enough with its functioning.
 
 ## License
 
