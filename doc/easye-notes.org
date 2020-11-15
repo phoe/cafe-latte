@@ -1,0 +1,19 @@
+#+TITLE: Comparison of JVM implementations of condition signalling
+
+On ongoing collaboration between phoe and easye on efficient
+implementation of ANSI CL condition systems on the JVM.
+
+#+begin_src lisp
+  (require :abcl-contrib)
+  (asdf:make :abcl-build)
+  (abcl-build:mvn/call (asdf:system-relative-pathname :cafe-latte ".") "install")
+#+end_src
+
+* Colophon
+  #+begin_example
+  Mark <evenson.not.org@gmail.com>
+  Created: 15-NOV-2020
+  Revised: <2020-11-15 Sun 13:38>
+  #+end_example
+
+  
