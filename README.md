@@ -56,9 +56,9 @@ AGPLv3. (Unless you are [**@easye**](https://github.com/easye), at which point i
 * [X] Restarts
   * Implemented in the `Restart` class.
   * Unit tests done.
-* [ ] `restart-bind`
+* [X] `restart-bind`
   * Implemented in the `RestartBind` class.
-  * Unit tests **NOT** yet done.
+  * Unit tests done.
 * [X] `restart-case`
   * Implemented in the `RestartCase` class.
   * Unit tests done.
