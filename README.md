@@ -22,7 +22,7 @@ Seriously, though, this library is not yet documented or complete; take a look a
 
 ## License
 
-AGPLv3. (Unless you are @easye, at which point it's whatever license suits you the best.)
+AGPLv3. (Unless you are [**@easye**](https://github.com/easye), at which point it's whatever license suits you the best.)
 
 ## Roadmap
 
