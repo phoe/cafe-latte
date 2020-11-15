@@ -49,9 +49,9 @@ Seriously, though, this library is not yet documented or complete; take a look a
 * [X] `handler-case`
   * Implemented in the `HandlerCase` class.
   * Unit tests done.
-* [ ] Restarts
+* [X] Restarts
   * Implemented in the `Restart` class.
-  * Unit tests **NOT** yet done.
+  * Unit tests done.
 * [ ] `restart-bind`
 * [ ] `restart-case`
 * [ ] Debugger
