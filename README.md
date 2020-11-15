@@ -12,6 +12,10 @@
 
 This is an implementation of Common Lisp dynamic variables, control flow operators, and condition system in plain Java.
 
+It started out as a proof that a condition system can be implemented even on top of a language that has only automatic memory management and a primitive unwinding operator (`throw`), but does not have dynamic variables or non-local returns by default.
+
+It should be possible to use it, or parts of it, in other projects, and its source code should be readable enough to understand the underlying mechanics of each Lisp control flow operator.
+
 ## Using Cafe Latte
 
 This library is not yet documented, but the respective implementations should behave analogously to their Common Lisp counterparts; see the [Common Lisp HyperSpec](http://clhs.lisp.se/) for their descriptions.
