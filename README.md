@@ -20,6 +20,10 @@ Each part of Common Lisp implemented here should have basic unit test coverage.
 
 Seriously, though, this library is not yet documented or complete; take a look at the unit tests if you really need to see how to use the various constructs provided here.
 
+## License
+
+AGPLv3. (Unless you are @easye, at which point it's whatever license suits you the best.)
+
 ## Roadmap
 
 * [X] Dynamic variables
