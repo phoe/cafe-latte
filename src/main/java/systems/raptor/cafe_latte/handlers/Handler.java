@@ -3,11 +3,13 @@ package systems.raptor.cafe_latte.handlers;
 import systems.raptor.cafe_latte.conditions.Condition;
 import systems.raptor.cafe_latte.dynamic_variables.DynamicVariable;
 
+import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
 import static systems.raptor.cafe_latte.dynamic_variables.DynamicVariable.bind;
+import static systems.raptor.cafe_latte.restarts.RestartCase.withSimpleRestart;
 
 public class Handler<T> implements Function<Condition, T> {
 
@@ -47,4 +49,23 @@ public class Handler<T> implements Function<Condition, T> {
       });
     }
   }
+
+  public static void warn(Condition condition) {
+    withSimpleRestart("MUFFLE-WARNING", "Muffle this warning.", () -> {
+      signal(condition);
+      System.err.printf("Warning: %s%n", condition);
+    });
+  }
+
+  public static void error(Condition condition) {
+    signal(condition);
+    // Should be:
+    // invokeDebugger(condition);
+    // But we have no debugger yet, so we must throw the given condition instead.
+    {
+      condition.makeReadyToThrow();
+      throw condition;
+    }
+  }
+
 }

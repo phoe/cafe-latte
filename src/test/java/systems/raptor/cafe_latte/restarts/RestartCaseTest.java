@@ -1,11 +1,13 @@
 package systems.raptor.cafe_latte.restarts;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static systems.raptor.cafe_latte.restarts.Restart.*;
+import static systems.raptor.cafe_latte.restarts.RestartCase.withSimpleRestart;
 
 class RestartCaseTest {
 
@@ -131,6 +133,20 @@ class RestartCaseTest {
       return null;
     }).get();
     assertEquals(20, ref.counter);
+  }
+
+  @Test
+  public void withSimpleRestartNoTransferTest() {
+    Boolean returnValue = withSimpleRestart("ABORT", "foo", () -> {});
+    assertEquals(false, returnValue);
+  }
+
+  @Test
+  public void withSimpleRestartTransferTest() {
+    Boolean returnValue = withSimpleRestart("ABORT", "foo", () -> {
+      invokeRestart(findRestart("ABORT"));
+    });
+    assertEquals(true, returnValue);
   }
 
 }

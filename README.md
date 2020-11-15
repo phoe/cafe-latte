@@ -67,11 +67,19 @@ AGPLv3. (Unless you are [**@easye**](https://github.com/easye), at which point i
 * [X] `restart-case`
   * Implemented in the `RestartCase` class.
   * Unit tests done.
+* [X] `with-simple-restart`
+  * Implemented in the `RestartCase` class as a static method.
+  * Unit tests done.
 
 ## What's TODO
 
 * [ ] `#'warn`
+  * Implemented in the `Handler` class as a static method.
+  * Unit tests **NOT** yet done.
 * [ ] `#'error`
+  * Implemented in the `Handler` class as a static method.
+  * Unit tests **NOT** yet done.
+* [ ] `ignore-errors`
 * [ ] Debugger
 * [ ] JShell as debugger REPL
 

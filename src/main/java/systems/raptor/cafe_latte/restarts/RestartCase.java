@@ -1,5 +1,6 @@
 package systems.raptor.cafe_latte.restarts;
 
+import org.apache.commons.lang3.tuple.Pair;
 import systems.raptor.cafe_latte.control_flow.block.Block;
 import systems.raptor.cafe_latte.control_flow.tagbody.Tagbody;
 import systems.raptor.cafe_latte.control_flow.tagbody.TagbodyElement;
@@ -11,23 +12,22 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import static systems.raptor.cafe_latte.control_flow.block.Block.returnFrom;
-import static systems.raptor.cafe_latte.control_flow.tagbody.Tagbody.go;
 import static systems.raptor.cafe_latte.control_flow.tagbody.Tagbody.tag;
 
-public class RestartCase<T, R> implements Supplier<T> {
+public class RestartCase<RestartArgument, ReturnType> implements Supplier<ReturnType> {
 
-  private final Supplier<T> body;
-  private final List<Restart<R, T>> restarts;
-  private final Block<T> block;
+  private final Supplier<RestartArgument> body;
+  private final List<Restart<RestartArgument, ReturnType>> restarts;
+  private final Block<ReturnType> block;
 
-  public RestartCase(List<Restart<R, T>> restarts, Supplier<T> body) {
+  public RestartCase(List<Restart<RestartArgument, ReturnType>> restarts, Supplier<RestartArgument> body) {
     this.restarts = restarts;
     this.body = body;
     block = generateBlock();
   }
 
-  private Block<T> generateBlock() {
-    Block<T> block = new Block<>();
+  private Block<ReturnType> generateBlock() {
+    Block<ReturnType> block = new Block<>();
     Tagbody tagbody = generateTagbody(block);
     block.setFunction((block1) -> {
       tagbody.accept(tagbody);
@@ -37,18 +37,18 @@ public class RestartCase<T, R> implements Supplier<T> {
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
-  private Tagbody generateTagbody(Block<T> block) {
+  private Tagbody generateTagbody(Block<ReturnType> block) {
     ArgumentStorage argumentStorage = new ArgumentStorage();
     List<TagbodyElement> tagbodyElements = new LinkedList<>();
     Tagbody tagbody = new Tagbody();
-    tagbodyElements.add((tagbody1) -> new RestartBind<T>((List) restarts, () -> {
+    tagbodyElements.add((tagbody1) -> new RestartBind<ReturnType>((List) restarts, () -> {
       returnFrom(block, body.get());
       return null;
     }).get());
-    for (Restart<R, T> restart : restarts) {
+    for (Restart<RestartArgument, ReturnType> restart : restarts) {
       TagbodyTag tag = tag();
       restart.trampolineTo(argumentStorage, tagbody, tag);
-      Supplier<T> supplier = () -> restart.getFunction().apply((R) argumentStorage.transferredArgument);
+      Supplier<ReturnType> supplier = () -> restart.getFunction().apply((RestartArgument) argumentStorage.transferredArgument);
       tagbodyElements.add(tag);
       tagbodyElements.add((tagbody1) -> returnFrom(block, supplier.get()));
     }
@@ -57,7 +57,17 @@ public class RestartCase<T, R> implements Supplier<T> {
   }
 
   @Override
-  public T get() {
+  public ReturnType get() {
     return block.get();
+  }
+
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  public static Boolean withSimpleRestart(String name, String report, Runnable body) {
+    Restart<Object, Boolean> restart = new Restart(name, (x) -> true, report);
+    RestartCase<Object, Boolean> restartCase = new RestartCase(List.of(restart), () -> {
+      body.run();
+      return false;
+    });
+    return restartCase.get();
   }
 }
