@@ -58,6 +58,9 @@ AGPLv3. (Unless you are [**@easye**](https://github.com/easye), at which point i
 * [X] `handler-case`
   * Implemented in the `HandlerCase` class.
   * Unit tests done.
+* [X] `ignore-errors`
+  * Implemented in the `HandlerCase` class as a static method.
+  * Unit tests done.
 * [X] Restarts
   * Implemented in the `Restart` class.
   * Unit tests done.
@@ -79,7 +82,6 @@ AGPLv3. (Unless you are [**@easye**](https://github.com/easye), at which point i
 * [ ] `#'error`
   * Implemented in the `Handler` class as a static method.
   * Unit tests **NOT** yet done.
-* [ ] `ignore-errors`
 * [ ] Debugger
 * [ ] JShell as debugger REPL
 

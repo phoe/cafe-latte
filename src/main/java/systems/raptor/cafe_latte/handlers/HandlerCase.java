@@ -1,6 +1,7 @@
 package systems.raptor.cafe_latte.handlers;
 
 import systems.raptor.cafe_latte.conditions.Condition;
+import systems.raptor.cafe_latte.conditions.Error;
 import systems.raptor.cafe_latte.control_flow.block.Block;
 import systems.raptor.cafe_latte.control_flow.tagbody.Tagbody;
 import systems.raptor.cafe_latte.control_flow.tagbody.TagbodyElement;
@@ -68,5 +69,14 @@ public class HandlerCase<T> implements Supplier<T> {
   @Override
   public T get() {
     return block.get();
+  }
+
+  public static Condition ignoreErrors(Runnable body) {
+    Handler<Condition> handler = new Handler<>(Error.class, (x) -> x);
+    HandlerCase<Condition> handlerCase = new HandlerCase<>(List.of(handler), () -> {
+      body.run();
+      return null;
+    });
+    return handlerCase.get();
   }
 }

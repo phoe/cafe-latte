@@ -61,10 +61,9 @@ public class RestartCase<RestartArgument, ReturnType> implements Supplier<Return
     return block.get();
   }
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
   public static Boolean withSimpleRestart(String name, String report, Runnable body) {
-    Restart<Object, Boolean> restart = new Restart(name, (x) -> true, report);
-    RestartCase<Object, Boolean> restartCase = new RestartCase(List.of(restart), () -> {
+    Restart<Object, Boolean> restart = new Restart<>(name, (x) -> true, report);
+    RestartCase<Object, Boolean> restartCase = new RestartCase<>(List.of(restart), () -> {
       body.run();
       return false;
     });

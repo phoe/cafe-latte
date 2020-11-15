@@ -2,11 +2,13 @@ package systems.raptor.cafe_latte.handlers;
 
 import org.junit.jupiter.api.Test;
 import systems.raptor.cafe_latte.conditions.Condition;
+import systems.raptor.cafe_latte.conditions.Error;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static systems.raptor.cafe_latte.handlers.Handler.signal;
+import static systems.raptor.cafe_latte.handlers.HandlerCase.ignoreErrors;
 
 class HandlerCaseTest {
 
@@ -88,6 +90,20 @@ class HandlerCaseTest {
       return null;
     }).get();
     assertEquals(20, ref.counter);
+  }
+
+  @Test
+  public void ignoreErrorsNoTransferTest() {
+    Condition returnValue = ignoreErrors(() -> {});
+    assertNull(returnValue);
+  }
+
+  @Test
+  public void ignoreErrorsTransferTest() {
+    Error error = new Error();
+    Condition returnValue = ignoreErrors(() -> signal(error));
+    assertNotNull(returnValue);
+    assertEquals(returnValue, error);
   }
 
 }
