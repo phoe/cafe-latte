@@ -95,7 +95,6 @@ public class Restart<R, T> implements Function<R, T> {
         }
       }
     }
-    Collections.reverse(result);
     return result;
   }
 

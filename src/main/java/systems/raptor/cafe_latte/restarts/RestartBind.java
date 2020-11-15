@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import static systems.raptor.cafe_latte.dynamic_variables.DynamicVariable.bind;
 import static systems.raptor.cafe_latte.restarts.Restart.restartClusters;
 
-public class RestartBind<T, R> implements Supplier<R> {
+public class RestartBind<R> implements Supplier<R> {
 
   private final Supplier<R> body;
   private final List<Restart<Object, Object>> restarts;

@@ -11,7 +11,7 @@ import static systems.raptor.cafe_latte.handlers.Handler.signal;
 class HandlerCaseTest {
 
   @Test
-  public void HandlerCaseNoHandlersTest() {
+  public void handlerCaseNoHandlersTest() {
     HandlerCase<String> handlerCase = new HandlerCase<>(List.of(), () -> {
       signal(new Condition());
       return "bar";
@@ -21,7 +21,7 @@ class HandlerCaseTest {
   }
 
   @Test
-  public void HandlerCaseMultipleHandlersTest() {
+  public void handlerCaseMultipleHandlersTest() {
     HandlerCase<String> handlerCase = new HandlerCase<>(List.of(
             new Handler<>(Condition.class, (condition) -> "foo"),
             new Handler<>(Condition.class, (condition) -> "bar"),
@@ -36,7 +36,7 @@ class HandlerCaseTest {
   private static class TestCondition extends Condition {}
 
   @Test
-  public void HandlerCaseMultipleHandlersInheritanceTest() {
+  public void handlerCaseMultipleHandlersInheritanceTest() {
     HandlerCase<String> handlerCase = new HandlerCase<>(List.of(
             new Handler<>(TestCondition.class, (condition) -> "foo"),
             new Handler<>(Condition.class, (condition) -> "bar"),
@@ -49,7 +49,7 @@ class HandlerCaseTest {
   }
 
   @Test
-  public void HandlerCaseTransferTest() {
+  public void handlerCaseTransferTest() {
     HandlerCase<String> handlerCase = new HandlerCase<>(List.of(
             new Handler<>(Condition.class, (condition) -> "foo")), () -> {
       signal(new Condition());
@@ -60,7 +60,7 @@ class HandlerCaseTest {
   }
 
   @Test
-  public void HandlerCaseNoTransferTest() {
+  public void handlerCaseNoTransferTest() {
     HandlerCase<String> handlerCase = new HandlerCase<>(List.of(
             new Handler<>(TestCondition.class, (condition) -> "foo")), () -> {
       signal(new Condition());
@@ -71,7 +71,7 @@ class HandlerCaseTest {
   }
 
   @Test
-  public void HandlerCaseUnwindOrderTest() {
+  public void handlerCaseUnwindOrderTest() {
     var ref = new Object() {
       int counter = 0;
     };

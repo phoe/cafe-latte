@@ -13,13 +13,13 @@ import static systems.raptor.cafe_latte.control_flow.block.Block.returnFrom;
 import static systems.raptor.cafe_latte.control_flow.tagbody.Tagbody.go;
 import static systems.raptor.cafe_latte.control_flow.tagbody.Tagbody.tag;
 
-public class RestartCase<T, R> implements Supplier<R> {
+public class RestartCase<T, R> implements Supplier<T> {
 
-  private final Supplier<R> body;
-  private final List<Restart<T, R>> restarts;
-  private final Block<R> block;
+  private final Supplier<T> body;
+  private final List<Restart<R, T>> restarts;
+  private final Block<T> block;
 
-  public RestartCase(List<Restart<T, R>> restarts, Supplier<R> body) {
+  public RestartCase(List<Restart<R, T>> restarts, Supplier<T> body) {
     this.restarts = restarts;
     this.body = body;
     block = generateBlock();
@@ -29,8 +29,8 @@ public class RestartCase<T, R> implements Supplier<R> {
     Object transferredArgument;
   }
 
-  private Block<R> generateBlock() {
-    Block<R> block = new Block<>();
+  private Block<T> generateBlock() {
+    Block<T> block = new Block<>();
     Tagbody tagbody = generateTagbody(block);
     block.setFunction((block1) -> {
       tagbody.accept(tagbody);
@@ -40,34 +40,34 @@ public class RestartCase<T, R> implements Supplier<R> {
   }
 
   @SuppressWarnings("unchecked")
-  private Tagbody generateTagbody(Block<R> block) {
+  private Tagbody generateTagbody(Block<T> block) {
     argumentStorage argumentStorage = new argumentStorage();
     List<TagbodyElement> tagbodyElements = new LinkedList<>();
     List<Restart<Object, Object>> trampolineRestarts = new LinkedList<>();
     Tagbody tagbody = new Tagbody();
-    tagbodyElements.add((tagbody1) -> new RestartBind<T, R>(trampolineRestarts, () -> {
+    tagbodyElements.add((tagbody1) -> new RestartBind<T>(trampolineRestarts, () -> {
       returnFrom(block, body.get());
       return null;
     }).get());
-    for (Restart<T, R> restart : restarts) {
+    for (Restart<R, T> restart : restarts) {
       TagbodyTag tag = tag();
-      Restart<Object, Object> newRestart = new Restart<>(restart.getName(), (argument) -> {
+      Restart<R, T> newRestart = new Restart<>(restart.getName(), (argument) -> {
         argumentStorage.transferredArgument = argument;
         go(tagbody, tag);
         return null;
-      }, restart.getReportFunction(), (Supplier<Object>) restart.getInteractiveFunction(),
+      }, restart.getReportFunction(), restart.getInteractiveFunction(),
               restart.getTestFunction());
-      trampolineRestarts.add(newRestart);
+      trampolineRestarts.add((Restart<Object, Object>) newRestart);
       tagbodyElements.add(tag);
       tagbodyElements.add((tagbody1) ->
-              returnFrom(block, restart.apply((T) argumentStorage.transferredArgument)));
+              returnFrom(block, restart.apply((R) argumentStorage.transferredArgument)));
     }
     tagbody.setElements(tagbodyElements.toArray(new TagbodyElement[]{}));
     return tagbody;
   }
 
   @Override
-  public R get() {
+  public T get() {
     return block.get();
   }
 }
