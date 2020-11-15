@@ -46,12 +46,15 @@ AGPLv3. (Unless you are [**@easye**](https://github.com/easye), at which point i
   * `throw`/`catch` are not required for implementing a condition system, but their implementations are nonetheless included here for completeness.
 * [X] Conditions
   * Implemented in the `Condition` class.
+  * Tested elsewhere.
   * Subtypes of `RuntimeException`.
   * Do not fill in the stack trace when instantiated; see the `makeReadyToThrow()` method.
 * [X] Handlers
   * Implemented in the `Handler` class.
+  * Tested elsewhere.
 * [X] `#'signal`
   * Implemented in the `Handler` class as a static method.
+  * Tested elsewhere.
 * [X] `#'warn`
   * Implemented in the `Handler` class as a static method.
   * Unit tests done.
