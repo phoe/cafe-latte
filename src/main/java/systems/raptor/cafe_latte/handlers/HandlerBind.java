@@ -25,7 +25,7 @@ public class HandlerBind<T> implements Supplier<T> {
     };
     List<List<Handler<Object>>> newClusters =
             Stream.concat(Stream.of(handlers), handlerClusters.get().stream())
-            .collect(Collectors.toList());
+                    .collect(Collectors.toList());
     bind(handlerClusters, newClusters, () -> ref.returnValue = body.get());
     return ref.returnValue;
   }

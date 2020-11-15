@@ -57,8 +57,7 @@ class RestartTest {
   public void withConditionRestartsTest() {
     Restart<Integer, String> restart = new Restart<>("CONTINUE", (i) -> String.format("%d", i));
     List<List<Restart<Integer, String>>> newClusters = List.of(List.of(restart));
-    Condition condition1 = new Condition();
-    Condition condition2 = new Condition();
+    Condition condition1 = new Condition(), condition2 = new Condition();
     bind(Restart.restartClusters, newClusters, () -> {
       assertEquals(restart, findRestart("CONTINUE"));
       assertEquals(restart, findRestart(restart));

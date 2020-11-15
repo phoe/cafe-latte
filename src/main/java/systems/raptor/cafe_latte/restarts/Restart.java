@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 public class Restart<R, T> implements Function<R, T> {
 
   @SuppressWarnings("rawtypes")
-  final static DynamicVariable<List<List<Restart>>> restartClusters
+  final static DynamicVariable<List<List<Restart<Object, Object>>>> restartClusters
           = new DynamicVariable<>(new LinkedList<>(new LinkedList<>()));
 
   private final String name;
@@ -77,7 +77,7 @@ public class Restart<R, T> implements Function<R, T> {
   @SuppressWarnings({"rawtypes"})
   public static List<Restart> computeRestarts(Condition condition) {
     List<Restart> result = new LinkedList<>();
-    for (List<Restart> cluster : restartClusters.get()) {
+    for (List<Restart<Object, Object>> cluster : restartClusters.get()) {
       for (Restart restart : cluster) {
         if (restart.isVisible(condition)) {
           result.add(restart);
@@ -90,7 +90,7 @@ public class Restart<R, T> implements Function<R, T> {
 
   @SuppressWarnings({"rawtypes"})
   public static Restart findRestart(String name, Condition condition) {
-    for (List<Restart> cluster : restartClusters.get()) {
+    for (List<Restart<Object, Object>> cluster : restartClusters.get()) {
       for (Restart restart : cluster) {
         if (restart.name.equals(name) && restart.isVisible(condition)) {
           return restart;
@@ -102,7 +102,7 @@ public class Restart<R, T> implements Function<R, T> {
 
   @SuppressWarnings({"rawtypes"})
   public static Restart findRestart(Restart restart, Condition condition) {
-    for (List<Restart> cluster : restartClusters.get()) {
+    for (List<Restart<Object, Object>> cluster : restartClusters.get()) {
       for (Restart restart1 : cluster) {
         if (restart1 == restart && restart.isVisible(condition)) {
           return restart;

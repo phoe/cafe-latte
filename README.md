@@ -53,6 +53,8 @@ Seriously, though, this library is not yet documented or complete; take a look a
   * Implemented in the `Restart` class.
   * Unit tests done.
 * [ ] `restart-bind`
+  * Implemented in the `RestartBind` class.
+  * Unit tests **NOT** yet done.
 * [ ] `restart-case`
 * [ ] Debugger
 * [ ] `#'error`
