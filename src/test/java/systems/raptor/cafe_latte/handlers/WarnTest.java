@@ -1,8 +1,6 @@
 package systems.raptor.cafe_latte.handlers;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import systems.raptor.cafe_latte.conditions.Warning;
 
 import java.io.ByteArrayOutputStream;
@@ -15,11 +13,12 @@ import static systems.raptor.cafe_latte.restarts.Restart.findRestart;
 import static systems.raptor.cafe_latte.restarts.Restart.invokeRestart;
 
 public class WarnTest {
-  private static final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
   private static final PrintStream originalErr = System.err;
+  private static ByteArrayOutputStream errContent;
 
-  @BeforeAll
-  static void setUpStreams() {
+  @BeforeEach
+  void setUpStreams() {
+    errContent = new ByteArrayOutputStream();
     System.setErr(new PrintStream(errContent));
   }
 

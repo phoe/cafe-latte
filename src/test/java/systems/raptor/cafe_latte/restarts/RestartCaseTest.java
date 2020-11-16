@@ -143,9 +143,7 @@ class RestartCaseTest {
 
   @Test
   public void withSimpleRestartTransferTest() {
-    Boolean returnValue = withSimpleRestart("ABORT", "foo", () -> {
-      invokeRestart(findRestart("ABORT"));
-    });
+    Boolean returnValue = withSimpleRestart("ABORT", "foo", () -> invokeRestart(findRestart("ABORT")));
     assertEquals(true, returnValue);
   }
 

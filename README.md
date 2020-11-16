@@ -82,10 +82,18 @@ AGPLv3. (Unless you are [**@easye**](https://github.com/easye), at which point i
 * [X] `with-simple-restart`
   * Implemented in the `RestartCase` class as a static method.
   * Unit tests done.
+* [X] Debugger interface
+  * Defined in the `Debugger` class.
+* [X] Throwing debugger
+  * Implemented in the `ThrowingDebugger` class.
+  * Tested along with `Error` class.
 
 ## What's TODO
 
-* [ ] Debugger
+* [ ] Interactive debugger
+* [ ] `break`
+* [ ] `*break-on-signals*`
+* [ ] `*debugger-hook*`
 * [ ] JShell as debugger REPL
 
 ## What's WONTDO
