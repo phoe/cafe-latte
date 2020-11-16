@@ -30,70 +30,75 @@ AGPLv3. (Unless you are [**@easye**](https://github.com/easye), at which point i
 
 ## What's DONE
 
-* [X] Dynamic variables
+* [X] **Dynamic variables**
   * Implemented in the `DynamicVariable` class.
   * Unit tests done.
-* [X] `tagbody`/`go`
-  * Implemented in the `Tagbody` class.
-  * Unit tests done.
-* [X] `block`/`return-from`
-  * Implemented in the `Block` class.
-  * Unit tests done.
-* [X] `throw`/`catch`
-  * Because of Java naming conflicts, `catch`/`throw` are renamed to `grasp`/`fling`.
-  * Implemented in the `Grasp` class.
-  * Unit tests done.
-  * `throw`/`catch` are not required for implementing a condition system, but their implementations are nonetheless included here for completeness.
-* [X] Conditions
-  * Implemented in the `Condition`, `Warning`, and `Error` classes.
-  * Tested elsewhere.
-  * Subtypes of `RuntimeException`.
-  * Do not fill in the stack trace when instantiated; see the `makeReadyToThrow()` method.
-* [X] Handlers
-  * Implemented in the `Handler` class.
-  * Tested elsewhere.
-* [X] `signal`
-  * Implemented in the `Handler` class as a static method.
-  * Tested elsewhere.
-* [X] `warn`
-  * Implemented in the `Handler` class as a static method.
-  * Unit tests done.
-* [X] `error`
-  * Implemented in the `Handler` class as a static method.
-  * Unit tests done.
-* [X] `handler-bind`
-  * Implemented in the `HandlerBind` class.
-  * Unit tests done.
-* [X] `handler-case`
-  * Implemented in the `HandlerCase` class.
-  * Unit tests done.
-* [X] `ignore-errors`
-  * Implemented in the `HandlerCase` class as a static method.
-  * Unit tests done.
-* [X] Restarts
-  * Implemented in the `Restart` class.
-  * Unit tests done.
-* [X] `restart-bind`
-  * Implemented in the `RestartBind` class.
-  * Unit tests done.
-* [X] `restart-case`
-  * Implemented in the `RestartCase` class.
-  * Unit tests done.
-* [X] `with-simple-restart`
-  * Implemented in the `RestartCase` class as a static method.
-  * Unit tests done.
-* [X] Debugger interface
-  * Defined in the `Debugger` class.
-* [X] Throwing debugger
-  * Implemented in the `ThrowingDebugger` class.
-  * Tested along with `Error` class.
+* [X] **Control flow**
+  * [X] `tagbody`/`go`
+    * Implemented in the `Tagbody` class.
+    * Unit tests done.
+  * [X] `block`/`return-from`
+    * Implemented in the `Block` class.
+    * Unit tests done.
+  * [X] `throw`/`catch`
+    * Because of Java naming conflicts, `catch`/`throw` are renamed to `grasp`/`fling`.
+    * Implemented in the `Grasp` class.
+    * Unit tests done.
+    * `throw`/`catch` are not required for implementing a condition system, but their implementations are nonetheless included here for completeness.
+* [X] **Conditions**
+  * [X] Condition/warning/error classes
+    * Implemented in the `Condition`, `Warning`, and `Error` classes.
+    * Tested elsewhere.
+    * Subtypes of `RuntimeException`.
+    * Do not fill in the stack trace when instantiated; see the `makeReadyToThrow()` method.
+* [X] **Handlers**
+  * [X] Handler class
+    * Implemented in the `Handler` class.
+    * Tested elsewhere.
+  * [X] `signal`
+    * Implemented in the `Handler` class as a static method.
+    * Tested elsewhere.
+  * [X] `warn`
+    * Implemented in the `Handler` class as a static method.
+    * Unit tests done.
+  * [X] `error`
+    * Implemented in the `Handler` class as a static method.
+    * Unit tests done.
+  * [X] `handler-bind`
+    * Implemented in the `HandlerBind` class.
+    * Unit tests done.
+  * [X] `handler-case`
+    * Implemented in the `HandlerCase` class.
+    * Unit tests done.
+  * [X] `ignore-errors`
+    * Implemented in the `HandlerCase` class as a static method.
+    * Unit tests done.
+* [X] **Restarts**
+  * [X] Restart class
+    * Implemented in the `Restart` class.
+    * Unit tests done.
+  * [X] `restart-bind`
+    * Implemented in the `RestartBind` class.
+    * Unit tests done.
+  * [X] `restart-case`
+    * Implemented in the `RestartCase` class.
+    * Unit tests done.
+  * [X] `with-simple-restart`
+    * Implemented in the `RestartCase` class as a static method.
+    * Unit tests done.
+* [X] **Debugger**
+  * [X] Debugger interface
+    * Defined in the `Debugger` class.
+  * [X] Throwing debugger
+    * Implemented in the `ThrowingDebugger` class.
+    * Tested along with `Error` class.
 
 ## What's TODO
 
-* [ ] Interactive debugger
 * [ ] `break`
 * [ ] `*break-on-signals*`
 * [ ] `*debugger-hook*`
+* [ ] Interactive debugger
 * [ ] JShell as debugger REPL
 
 ## What's WONTDO
