@@ -31,8 +31,9 @@ AGPLv3. (Unless you are [**@easye**](https://github.com/easye), at which point i
 ## What's DONE
 
 * [X] **Dynamic variables**
-  * Implemented in the `DynamicVariable` class.
-  * Unit tests done.
+  * [X] Dynamic variable class
+    * Implemented in the `DynamicVariable` class.
+    * Unit tests done.
 * [X] **Control flow**
   * [X] `tagbody`/`go`
     * Implemented in the `Tagbody` class.
@@ -46,11 +47,16 @@ AGPLv3. (Unless you are [**@easye**](https://github.com/easye), at which point i
     * Unit tests done.
     * `throw`/`catch` are not required for implementing a condition system, but their implementations are nonetheless included here for completeness.
 * [X] **Conditions**
-  * [X] Condition/warning/error classes
-    * Implemented in the `Condition`, `Warning`, and `Error` classes.
-    * Tested elsewhere.
-    * Subtypes of `RuntimeException`.
+  * [X] Condition class
+    * Implemented in the `Condtion` class.
+    * Subtype of `RuntimeException`.
     * Do not fill in the stack trace when instantiated; see the `makeReadyToThrow()` method.
+  * [X] Warning class
+    * Implemented in the `Warning` class.
+    * Subtype of `Condition`.
+  * [X] Error class
+    * Implemented in the `Error` class.
+    * Subtype of `Condition`.
 * [X] **Handlers**
   * [X] Handler class
     * Implemented in the `Handler` class.
@@ -95,9 +101,9 @@ AGPLv3. (Unless you are [**@easye**](https://github.com/easye), at which point i
 
 ## What's TODO
 
+* [ ] `*debugger-hook*`
 * [ ] `break`
 * [ ] `*break-on-signals*`
-* [ ] `*debugger-hook*`
 * [ ] Interactive debugger
 * [ ] JShell as debugger REPL
 
