@@ -50,7 +50,7 @@ AGPLv3. (Unless you are [**@easye**](https://github.com/easye), at which point i
   * [X] Condition class
     * Implemented in the `Condtion` class.
     * Subtype of `RuntimeException`.
-    * Do not fill in the stack trace when instantiated; see the `makeReadyToThrow()` method.
+    * Do not fill in the stack trace when instantiated; see the `superFillInStackTrace()` method.
   * [X] Warning class
     * Implemented in the `Warning` class.
     * Subtype of `Condition`.

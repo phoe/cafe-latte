@@ -7,7 +7,7 @@ public class Condition extends RuntimeException {
     return this;
   }
 
-  public void makeReadyToThrow() {
+  public void superFillInStackTrace() {
     super.fillInStackTrace();
   }
 }

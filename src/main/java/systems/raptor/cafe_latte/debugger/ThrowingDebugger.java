@@ -6,7 +6,7 @@ public class ThrowingDebugger implements Debugger {
 
   @Override
   public void invoke(Condition condition) {
-    condition.makeReadyToThrow();
+    condition.superFillInStackTrace();
     throw condition;
   }
 
