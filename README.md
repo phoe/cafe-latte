@@ -95,9 +95,9 @@ AGPLv3. (Unless you are [**@easye**](https://github.com/easye), at which point i
 * [X] **Debugger**
   * [X] Debugger interface
     * Defined in the `Debugger` class.
-  * [X] Throwing debugger
-    * Implemented in the `ThrowingDebugger` class.
-    * Tested along with `Error` class.
+  * [X] No debugger
+    * Implemented in the `NoDebugger` class.
+    * Tested along with the `Error` class by means of calling the static `error` method.
 
 ## What's TODO
 

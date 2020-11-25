@@ -2,12 +2,10 @@ package systems.raptor.cafe_latte.debugger;
 
 import systems.raptor.cafe_latte.conditions.Condition;
 
-public class ThrowingDebugger implements Debugger {
+public class NoDebugger implements Debugger {
 
   @Override
   public void invoke(Condition condition) {
-    condition.superFillInStackTrace();
-    throw condition;
   }
 
 }
