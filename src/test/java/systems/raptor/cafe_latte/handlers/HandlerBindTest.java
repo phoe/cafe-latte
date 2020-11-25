@@ -89,22 +89,20 @@ class HandlerBindTest {
   }
 
   @SuppressWarnings("SameParameterValue")
-  private Handler<Object> makeAdditionHandler(Class<? extends Condition> conditionClass,
+  private Handler makeAdditionHandler(Class<? extends Condition> conditionClass,
                                               Counter counter, int amount, boolean resignal) {
-    return new Handler<>(conditionClass, (condition) -> {
+    return new Handler(conditionClass, (condition) -> {
       counter.counter += amount;
       if (resignal) signal(condition);
-      return null;
     });
   }
 
   @SuppressWarnings("SameParameterValue")
-  private Handler<Object> makeMultiplicationHandler(Class<? extends Condition> conditionClass,
+  private Handler makeMultiplicationHandler(Class<? extends Condition> conditionClass,
                                                     Counter counter, int amount, boolean resignal) {
-    return new Handler<>(conditionClass, (condition) -> {
+    return new Handler(conditionClass, (condition) -> {
       counter.counter *= amount;
       if (resignal) signal(condition);
-      return null;
     });
   }
 

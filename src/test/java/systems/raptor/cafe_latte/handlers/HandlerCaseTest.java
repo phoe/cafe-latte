@@ -1,5 +1,6 @@
 package systems.raptor.cafe_latte.handlers;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 import systems.raptor.cafe_latte.conditions.Condition;
 import systems.raptor.cafe_latte.conditions.Error;
@@ -25,9 +26,9 @@ class HandlerCaseTest {
   @Test
   public void handlerCaseMultipleHandlersTest() {
     HandlerCase<String> handlerCase = new HandlerCase<>(List.of(
-            new Handler<>(Condition.class, (condition) -> "foo"),
-            new Handler<>(Condition.class, (condition) -> "bar"),
-            new Handler<>(Condition.class, (condition) -> "baz")), () -> {
+            Pair.of(Condition.class, (condition) -> "foo"),
+            Pair.of(Condition.class, (condition) -> "bar"),
+            Pair.of(Condition.class, (condition) -> "baz")), () -> {
       signal(new Condition());
       return "quux";
     });
@@ -40,9 +41,9 @@ class HandlerCaseTest {
   @Test
   public void handlerCaseMultipleHandlersInheritanceTest() {
     HandlerCase<String> handlerCase = new HandlerCase<>(List.of(
-            new Handler<>(TestCondition.class, (condition) -> "foo"),
-            new Handler<>(Condition.class, (condition) -> "bar"),
-            new Handler<>(TestCondition.class, (condition) -> "baz")), () -> {
+            Pair.of(TestCondition.class, (condition) -> "foo"),
+            Pair.of(Condition.class, (condition) -> "bar"),
+            Pair.of(TestCondition.class, (condition) -> "baz")), () -> {
       signal(new Condition());
       return "quux";
     });
@@ -53,7 +54,7 @@ class HandlerCaseTest {
   @Test
   public void handlerCaseTransferTest() {
     HandlerCase<String> handlerCase = new HandlerCase<>(List.of(
-            new Handler<>(Condition.class, (condition) -> "foo")), () -> {
+            Pair.of(Condition.class, (condition) -> "foo")), () -> {
       signal(new Condition());
       return "bar";
     });
@@ -64,7 +65,7 @@ class HandlerCaseTest {
   @Test
   public void handlerCaseNoTransferTest() {
     HandlerCase<String> handlerCase = new HandlerCase<>(List.of(
-            new Handler<>(TestCondition.class, (condition) -> "foo")), () -> {
+            Pair.of(TestCondition.class, (condition) -> "foo")), () -> {
       signal(new Condition());
       return "bar";
     });
@@ -77,11 +78,7 @@ class HandlerCaseTest {
     var ref = new Object() {
       int counter = 0;
     };
-    Handler<Void> handler = new Handler<>(Condition.class, (condition) -> {
-      ref.counter *= 2;
-      return null;
-    });
-    new HandlerCase<>(List.of(handler), () -> {
+    new HandlerCase<>(List.of(Pair.of(Condition.class, (c) -> ref.counter *= 2)), () -> {
       try {
         signal(new Condition());
       } finally {
@@ -101,7 +98,9 @@ class HandlerCaseTest {
   @Test
   public void ignoreErrorsTransferTest() {
     Error error = new Error();
-    Condition returnValue = ignoreErrors(() -> signal(error));
+    Condition returnValue = ignoreErrors(() -> {
+      signal(error);
+    });
     assertNotNull(returnValue);
     assertEquals(returnValue, error);
   }

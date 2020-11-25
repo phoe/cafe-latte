@@ -75,12 +75,12 @@ public class Restart<R, T> implements Function<R, T> {
             (condition == null || associatedConditions.isEmpty() || associatedConditions.contains(condition));
   }
 
+  // Trampoline mechanism (for RestartCase)
+  // Required to preserve identity of restart objects - see https://github.com/phoe/cafe-latte/issues/4
+
   static class ArgumentStorage {
     Object transferredArgument;
   }
-
-  // Trampoline mechanism (for RestartCase)
-  // Required to preserve identity of restart objects - see https://github.com/phoe/cafe-latte/issues/4
 
   private ArgumentStorage argumentStorage = null;
   private Tagbody tagbody = null;
@@ -202,6 +202,10 @@ public class Restart<R, T> implements Function<R, T> {
 
   public static Object invokeRestart(String name, Object argument) {
     return findRestartHelper(name, (restart) -> invokeRestart(restart, argument));
+  }
+
+  public static Object invokeRestart(String name) {
+    return invokeRestart(name, null);
   }
 
   public static Object invokeRestartInteractively(String name) {

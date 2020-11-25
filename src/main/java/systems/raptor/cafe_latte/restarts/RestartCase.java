@@ -1,6 +1,5 @@
 package systems.raptor.cafe_latte.restarts;
 
-import org.apache.commons.lang3.tuple.Pair;
 import systems.raptor.cafe_latte.control_flow.block.Block;
 import systems.raptor.cafe_latte.control_flow.tagbody.Tagbody;
 import systems.raptor.cafe_latte.control_flow.tagbody.TagbodyElement;

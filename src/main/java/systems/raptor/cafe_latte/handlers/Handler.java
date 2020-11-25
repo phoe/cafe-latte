@@ -3,52 +3,67 @@ package systems.raptor.cafe_latte.handlers;
 import systems.raptor.cafe_latte.conditions.Condition;
 import systems.raptor.cafe_latte.dynamic_variables.DynamicVariable;
 
-import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static systems.raptor.cafe_latte.debugger.Debugger.invokeDebugger;
+import static systems.raptor.cafe_latte.debugger.Debugger.*;
 import static systems.raptor.cafe_latte.dynamic_variables.DynamicVariable.bind;
 import static systems.raptor.cafe_latte.restarts.RestartCase.withSimpleRestart;
 
-public class Handler<T> implements Function<Condition, T> {
+public class Handler implements Consumer<Condition> {
 
-  final static DynamicVariable<List<List<Handler<Object>>>> handlerClusters
+  public final static DynamicVariable<List<Class<? extends Condition>>> breakOnSignals
+          = new DynamicVariable<>(new LinkedList<>());
+
+  final static DynamicVariable<List<List<Handler>>> handlerClusters
           = new DynamicVariable<>(new LinkedList<>(new LinkedList<>()));
 
   private final Class<? extends Condition> conditionClass;
-  private final Function<? super Condition, T> function;
+  private final Consumer<? super Condition> consumer;
 
   Class<? extends Condition> getConditionClass() {
     return conditionClass;
   }
 
-  public Handler(Class<? extends Condition> conditionClass, Function<? super Condition, T> function) {
+  public Handler(Class<? extends Condition> conditionClass, Consumer<? super Condition> consumer) {
     this.conditionClass = conditionClass;
-    this.function = function;
+    this.consumer = consumer;
   }
 
-  @Override
-  public T apply(Condition condition) {
+  @Override // TODO handlers are supposed to return void
+  public void accept(Condition condition) {
     if (conditionClass.isInstance(condition)) {
-      return function.apply(condition);
-    } else {
-      return null;
+      consumer.accept(condition);
+    }
+  }
+
+  private static void maybeBreakIntoDebugger(Condition condition) {
+    List<Class<? extends Condition>> classes = breakOnSignals.get();
+    for (Class<? extends Condition> clazz : classes) {
+      if (clazz.isInstance(condition)) {
+        breakIntoDebugger();
+      }
+    }
+  }
+
+  private static void doSignal(Condition condition) {
+    List<List<Handler>> clusters = handlerClusters.get();
+    for (int i = 0; i < clusters.size(); ++i) {
+      List<Handler> cluster = clusters.get(i);
+      List<List<Handler>> remainingClusters = clusters.subList(i + 1, clusters.size());
+      bind(handlerClusters, remainingClusters, () -> {
+        for (Handler handler : cluster) {
+          handler.accept(condition);
+        }
+      });
     }
   }
 
   public static void signal(Condition condition) {
-    List<List<Handler<Object>>> clusters = handlerClusters.get();
-    for (int i = 0; i < clusters.size(); ++i) {
-      List<Handler<Object>> cluster = clusters.get(i);
-      List<List<Handler<Object>>> remainingClusters = clusters.subList(i + 1, clusters.size());
-      bind(handlerClusters, remainingClusters, () -> {
-        for (Handler<Object> handler : cluster) {
-          handler.apply(condition);
-        }
-      });
-    }
+    maybeBreakIntoDebugger(condition);
+    doSignal(condition);
   }
 
   public static void warn(Condition condition) {

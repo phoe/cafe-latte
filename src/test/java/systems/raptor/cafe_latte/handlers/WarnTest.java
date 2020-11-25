@@ -30,9 +30,8 @@ public class WarnTest {
 
   @Test
   public void warnTestHandled() {
-    Handler<Object> handler = new Handler<>(Warning.class, (condition) -> {
+    Handler handler = new Handler(Warning.class, (condition) -> {
       invokeRestart(findRestart("MUFFLE-WARNING"));
-      return null;
     });
     new HandlerBind<>(List.of(handler), () -> {
       warn(new Warning());

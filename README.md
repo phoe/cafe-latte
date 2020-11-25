@@ -70,6 +70,9 @@ AGPLv3. (Unless you are [**@easye**](https://github.com/easye), at which point i
   * [X] `error`
     * Implemented in the `Handler` class as a static method.
     * Unit tests done.
+  * [X] `*break-on-signals*`
+    * Implemented in the `Handler` class as a dynamic variable.
+    * Unit tests done.
   * [X] `handler-bind`
     * Implemented in the `HandlerBind` class.
     * Unit tests done.
@@ -95,18 +98,26 @@ AGPLv3. (Unless you are [**@easye**](https://github.com/easye), at which point i
 * [X] **Debugger**
   * [X] Debugger interface
     * Defined in the `Debugger` class.
+  * [X] `*debugger-hook*`
+    * Implemented in the `Debugger` class as a dynamic variable.
+    * Unit tests done.
+  * [X] `break`
+    * Implemented in the `Debugger` class as a static method.
+    * Unit tests done.
+    * Because of Java naming conflicts, `break` is renamed to `breakIntoDebugger`.
   * [X] No debugger
     * Implemented in the `NoDebugger` class.
     * Tested along with the `Error` class by means of calling the static `error` method.
 
 ## What's TODO
 
-* [ ] `*debugger-hook*`
-* [ ] `break`
-* [ ] `*break-on-signals*`
+* [ ] Condition reports
+  * Should map nicely to the standard Java exception `toString` mechanism.
+* [ ] Restart reports
+  * Should map nicely to the standard Java exception `toString` mechanism.
 * [ ] Interactive debugger
 * [ ] JShell as debugger REPL
 
 ## What's WONTDO
 
-* [X] `unwind-protect` - Java has `finally` that is fully equivalent.
+* [X] `unwind-protect` - Java has `try`/`finally` that is fully equivalent.

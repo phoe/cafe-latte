@@ -1,5 +1,6 @@
 package systems.raptor.cafe_latte.handlers;
 
+import org.apache.commons.lang3.tuple.Pair;
 import systems.raptor.cafe_latte.conditions.Condition;
 import systems.raptor.cafe_latte.conditions.Error;
 import systems.raptor.cafe_latte.control_flow.block.Block;
@@ -9,6 +10,7 @@ import systems.raptor.cafe_latte.control_flow.tagbody.TagbodyTag;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static systems.raptor.cafe_latte.control_flow.block.Block.returnFrom;
@@ -17,23 +19,18 @@ import static systems.raptor.cafe_latte.control_flow.tagbody.Tagbody.tag;
 
 public class HandlerCase<T> implements Supplier<T> {
 
-  private final Supplier<T> body;
-  private final List<Handler<T>> handlers;
+  private final List<Pair<Class<? extends Condition>, Function<Condition, T>>> pairs;
   private final Block<T> block;
 
-  public HandlerCase(List<Handler<T>> handlers, Supplier<T> body) {
-    this.handlers = handlers;
-    this.body = body;
-    block = generateBlock();
+  public HandlerCase(List<Pair<Class<? extends Condition>, Function<Condition, T>>> pairs,
+                     Supplier<T> body) {
+    this.pairs = pairs;
+    block = generateBlock(body);
   }
 
-  static class ConditionStorage {
-    Condition transferredCondition;
-  }
-
-  private Block<T> generateBlock (){
+  private Block<T> generateBlock (Supplier<T> body){
     Block<T> block = new Block<>();
-    Tagbody tagbody = generateTagbody(block);
+    Tagbody tagbody = generateTagbody(block, body);
     block.setFunction((block1) -> {
       tagbody.accept(tagbody);
       return null;
@@ -41,26 +38,26 @@ public class HandlerCase<T> implements Supplier<T> {
     return block;
   }
 
-  private Tagbody generateTagbody(Block<T> block) {
-    ConditionStorage conditionStorage = new ConditionStorage();
+  private Tagbody generateTagbody(Block<T> block, Supplier<T> body) {
+    var ref = new Object() {
+      Condition transferredCondition;
+    };
     List<TagbodyElement> tagbodyElements = new LinkedList<>();
-    List<Handler<Object>> trampolineHandlers = new LinkedList<>();
+    List<Handler> handlers = new LinkedList<>();
     Tagbody tagbody = new Tagbody();
-    tagbodyElements.add((tagbody1) -> new HandlerBind<T>(trampolineHandlers, () -> {
+    tagbodyElements.add((tagbody1) -> new HandlerBind<T>(handlers, () -> {
       returnFrom(block, body.get());
       return null;
     }).get());
-    for (Handler<T> handler : handlers) {
+    for (Pair<Class<? extends Condition>, Function<Condition, T>> pair : pairs) {
       TagbodyTag tag = tag();
-      Handler<Object> newHandler = new Handler<>(handler.getConditionClass(), (condition) -> {
-        conditionStorage.transferredCondition = condition;
+      handlers.add(new Handler(pair.getLeft(), (c) -> {
+        ref.transferredCondition = c;
         go(tagbody, tag);
-        return null;
-      });
-      trampolineHandlers.add(newHandler);
+      }));
       tagbodyElements.add(tag);
       tagbodyElements.add((tagbody1) ->
-              returnFrom(block, handler.apply(conditionStorage.transferredCondition)));
+              returnFrom(block, pair.getRight().apply(ref.transferredCondition)));
     }
     tagbody.setElements(tagbodyElements.toArray(new TagbodyElement[]{}));
     return tagbody;
@@ -72,8 +69,8 @@ public class HandlerCase<T> implements Supplier<T> {
   }
 
   public static Condition ignoreErrors(Runnable body) {
-    Handler<Condition> handler = new Handler<>(Error.class, (x) -> x);
-    HandlerCase<Condition> handlerCase = new HandlerCase<>(List.of(handler), () -> {
+    Function<Condition, Condition> function = (x) -> x;
+    HandlerCase<Condition> handlerCase = new HandlerCase<>(List.of(Pair.of(Error.class, function)), () -> {
       body.run();
       return null;
     });

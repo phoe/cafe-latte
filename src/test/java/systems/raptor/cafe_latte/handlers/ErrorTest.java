@@ -1,5 +1,6 @@
 package systems.raptor.cafe_latte.handlers;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 import systems.raptor.cafe_latte.conditions.Error;
 
@@ -12,14 +13,12 @@ public class ErrorTest {
 
   @Test
   public void errorTestUnhandled() {
-    // TODO: this will need to be adjusted when we implement the debugger.
     assertThrows(Error.class, () -> error(new Error()));
   }
 
   @Test
   public void errorTestHandled() {
-    Handler<Object> handler = new Handler<>(Error.class, (condition) -> null);
-    assertDoesNotThrow(() -> new HandlerCase<>(List.of(handler), () -> {
+    assertDoesNotThrow(() -> new HandlerCase<>(List.of(Pair.of(Error.class, (condition) -> null)), () -> {
       error(new Error());
       return null;
     }).get());
