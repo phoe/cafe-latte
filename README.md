@@ -12,7 +12,7 @@
 
 This is an implementation of Common Lisp dynamic variables, control flow operators, and condition system in plain Java.
 
-It started out as a proof that a condition system can be implemented even on top of a language that has only automatic memory management and a primitive unwinding operator (`throw`), but does not have dynamic variables or non-local returns by default.
+If [Portable Conditon System](https://github.com/phoe/portable-condition-system) is a proof that a Common Lisp condition system can be implemented on a Common Lisp implementation without a condition system of its own, then Cafe Latte is a proof that a Common Lisp-inspired condition system can be implemented even on top of a non-Lisp language that has only automatic memory management and a primitive unwinding operator (in this case, `throw`), but does not support dynamic variables or non-local returns by default.
 
 It should be possible to use it, or parts of it, in other projects, and its source code should be readable enough to understand the underlying mechanics of each Lisp control flow operator.
 
