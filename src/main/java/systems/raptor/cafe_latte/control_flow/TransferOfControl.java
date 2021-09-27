@@ -11,4 +11,15 @@ public class TransferOfControl extends RuntimeException {
   public Object getTag() {
     return tag;
   }
+
+  /**
+   * Disable creation of stack traces for this kind of flow control exception.
+   *
+   * <p>See: <a href="https://www.baeldung.com/java-exceptions-performance">Baeldung - Performance
+   * Effects of Exceptions in Java</a>
+   */
+  @Override
+  public synchronized Throwable fillInStackTrace() {
+    return this;
+  }
 }
